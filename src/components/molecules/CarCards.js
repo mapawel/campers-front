@@ -49,7 +49,7 @@ const CarCards = ({ cars, fetchAll }) => {
           _id,
           name,
           year,
-          lentght,
+          length,
           seats,
           description }) =>
           <Grid
@@ -64,7 +64,7 @@ const CarCards = ({ cars, fetchAll }) => {
                   {bull} from {year}
                 </Typography>
                 <Typography variant="h5" component="h2">
-                  {bull} length: {lentght}
+                  {bull} length: {length}
                 </Typography>
                 <Typography variant="h5" component="h2">
                   {bull} seats: {seats}

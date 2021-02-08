@@ -20,20 +20,6 @@ const Root = () => {
   const [isAddingOpen, setAddingOpen] = useState(false)
   const classes = useStyles();
 
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     try {
-  //       const fetchData = await axios.get('/api/offer/cars');
-  //       setCars(fetchData.data.cars);
-  //     } catch (err) {
-  //       throw new Error('Mój ERROR:', err)
-  //     }
-  //   }
-
-  //   fetch()
-  // }, [])
-
-
   return (
     <RootTemplate>
       <Section>
