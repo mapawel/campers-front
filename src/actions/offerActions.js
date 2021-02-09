@@ -34,7 +34,8 @@ export const addCar = (car) => (async (dispatch) => {
       type: ADD_CAR_REQUESTED,
       payload: 'Updating data...',
     })
-    const { name, year, seats, length, description } = car
+    const { name, year, seats, length, description, images } = car
+    console.log(images)
     const response = await axios({
       method: 'POST',
       url: '/api/offer/car',
@@ -44,7 +45,8 @@ export const addCar = (car) => (async (dispatch) => {
         year,
         length,
         seats,
-        description
+        description,
+        images,
       }
     })
     console.log(response)

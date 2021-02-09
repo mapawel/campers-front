@@ -38,6 +38,7 @@ const validationSchema = yup.object({
 
 const AddModalBody = ({ close, addFn }) => {
   const classes = useStyles();
+  const [images, setImages] = useState([])
 
   const formik = useFormik({
     initialValues: {
@@ -49,10 +50,14 @@ const AddModalBody = ({ close, addFn }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const test = await addFn(values);
+      const response = await addFn({...values, images});
       close()
     },
   });
+
+  const handleAddImages = (e) => {
+    setImages(e.target.files)
+  }
 
 
   return (
@@ -117,6 +122,22 @@ const AddModalBody = ({ close, addFn }) => {
           type="textarea"
           fullWidth
         />
+        <input
+          id="images"
+          accept="image/*"
+          hidden
+          multiple
+          type="file"
+          name="images"
+          onChange={handleAddImages}
+        />
+        <label htmlFor="images">
+          <Button variant="contained" component="span">
+            Upload photos
+          </Button>
+        </label>
+
+
         <Button
           variant="contained"
           color="primary"

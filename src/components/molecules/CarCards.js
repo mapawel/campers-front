@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { startFetchCars } from 'actions/offerActions'
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardActions, CardContent, Button, Typography, Grid } from '@material-ui/core';
 
@@ -53,35 +54,39 @@ const CarCards = ({ cars, fetchAll }) => {
           seats,
           description }) =>
           <Grid
-          item
-          key={_id}>
-            <Card className={classes.root} variant="outlined">
-              <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                  {name}
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  {bull} from {year}
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  {bull} length: {length}
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  {bull} seats: {seats}
-                </Typography>
-                <Typography className={classes.pos} color="textPrimary">
-                  {description}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">details</Button>
-              </CardActions>
-            </Card>
-          </Grid>)
+            item
+            key={_id}
+            id={_id}>
+            <Link to={`/${_id}`}>
+              <Card className={classes.root} variant="outlined">
+                <CardContent>
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    {name}
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {bull} from {year}
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {bull} length: {length}
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {bull} seats: {seats}
+                  </Typography>
+                  <Typography className={classes.pos} color="textPrimary">
+                    {description}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small">details</Button>
+                </CardActions>
+              </Card>
+            </Link>
+          </Grid>
+        )
         }
       </>
-    </Grid>
-    )
+    </Grid >
+  )
 };
 
 
@@ -89,7 +94,7 @@ Card.propTypes = {
 
 };
 
-const mapStateToProps = (state) => ({cars: state.cars})
+const mapStateToProps = (state) => ({ cars: state.cars })
 const mapDispatchToProps = (disatch) => ({
   fetchAll: () => disatch(startFetchCars())
 })

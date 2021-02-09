@@ -1,47 +1,32 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import RootTemplate from 'templates/RootTemplate';
-import axios from 'axios';
-import { Button, Modal } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Section from 'templates/Section';
-import CarCards from 'components/molecules/CarCards';
-import AddModalBody from 'components/molecules/AddModalBody';
+import Home from 'views/Home';
+import Offer from 'views/Offer';
+import Navbar from 'components/organizms/Navbar';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-}));
 
-const Root = () => {
-  const [isAddingOpen, setAddingOpen] = useState(false)
-  const classes = useStyles();
-
-  return (
-    <RootTemplate>
-      <Section>
-        <Button
-          color="primary"
-          variant="contained"
-          size="large"
-          onClick={() => setAddingOpen(true)}
-        >add a new car</Button>
-        <CarCards />
-        <Modal
-          open={isAddingOpen}
-          onClose={() => setAddingOpen(false)}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          className={classes.modal}
-        >
-          <AddModalBody close={() => setAddingOpen(false)} />
-        </Modal>
-      </Section>
-    </RootTemplate>
-  )
-}
+const Root = () => (
+  <RootTemplate>
+    <Router>
+    <Navbar />
+      <Switch>
+        <Route exact path='/'>
+          <Home />
+        </Route>
+        <Route
+          path='/:offerId'
+          children={({ match }) => (
+            <Offer match={match} />
+          )}
+        />
+      </Switch>
+    </Router>
+  </RootTemplate>
+)
 
 export default Root;

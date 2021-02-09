@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"eslint.format.enable": true,
+		"liveServer.settings.multiRootWorkspaceName": "projectsLint"
+	}
+}
