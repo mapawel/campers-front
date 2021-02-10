@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   grid: {
     padding: '3rem 0',
+  },
+  link: {
+    textDecoration: 'none',
   }
 }));
 
@@ -57,7 +60,7 @@ const CarCards = ({ cars, fetchAll }) => {
             item
             key={_id}
             id={_id}>
-            <Link to={`/${_id}`}>
+            <Link to={`/${_id}`} className={classes.link}>
               <Card className={classes.root} variant="outlined">
                 <CardContent>
                   <Typography className={classes.title} color="textSecondary" gutterBottom>

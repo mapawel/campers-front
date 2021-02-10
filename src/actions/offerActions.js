@@ -5,6 +5,9 @@ export const ADD_CAR_ERROR = 'ADD_CAR_ERROR';
 export const STARTFETCH_CAR_REQUESTED = 'STARTFETCH_CAR_REQUESTED';
 export const STARTFETCH_CAR_SUCCESS = 'STARTFETCH_CAR_SUCCESS';
 export const STARTFETCH_CAR_ERROR = 'STARTFETCH_CAR_ERROR';
+export const FETCH_CARBYID_REQUESTED = 'FETCH_CARBYID_REQUESTED';
+export const FETCH_CARBYID_SUCCESS = 'FETCH_CARBYID_SUCCESS';
+export const FETCH_CARBYID_ERROR = 'FETCH_CARBYID_ERROR';
 
 export const startFetchCars = () => (async (dispatch) => {
   try {
@@ -22,6 +25,27 @@ export const startFetchCars = () => (async (dispatch) => {
   } catch (err) {
     dispatch({
       type: STARTFETCH_CAR_ERROR,
+      payload: err.message
+    })
+  }
+})
+
+export const fetchCarById = (carId) => (async (dispatch) => {
+  try {
+    dispatch({
+      type: FETCH_CARBYID_REQUESTED,
+      payload: 'Fetching car data...',
+    })
+    const fetchData = await axios.get(`/api/offer/car/${carId}`);
+    if (fetchData.status === 200) {
+      dispatch({
+        type: FETCH_CARBYID_SUCCESS,
+        payload: fetchData.data.car
+      })
+    }
+  } catch (err) {
+    dispatch({
+      type: FETCH_CARBYID_ERROR,
       payload: err.message
     })
   }

@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { ADD_CAR_REQUESTED, ADD_CAR_SUCCESS, ADD_CAR_ERROR, STARTFETCH_CAR_REQUESTED, STARTFETCH_CAR_SUCCESS, STARTFETCH_CAR_ERROR } from 'actions/offerActions'
+import { ADD_CAR_REQUESTED, ADD_CAR_SUCCESS, ADD_CAR_ERROR, STARTFETCH_CAR_REQUESTED, STARTFETCH_CAR_SUCCESS, STARTFETCH_CAR_ERROR, FETCH_CARBYID_REQUESTED, FETCH_CARBYID_SUCCESS, FETCH_CARBYID_ERROR } from 'actions/offerActions'
 
 const initialState = {
   cars: []
@@ -17,6 +17,20 @@ const offerReducer = (state = initialState, { type, payload }) => {
         cars: [...payload]
       }
     case STARTFETCH_CAR_ERROR:
+      toast.error(payload)
+      return state
+
+
+    case FETCH_CARBYID_REQUESTED:
+      toast(payload)
+      return state
+    case FETCH_CARBYID_SUCCESS:
+      toast.success('Car data fetched from db')
+      return {
+        ...state,
+        cars: [...state.cars, payload]
+      }
+    case FETCH_CARBYID_ERROR:
       toast.error(payload)
       return state
 

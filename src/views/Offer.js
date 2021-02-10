@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from "react-router-dom";
 import { connect } from 'react-redux';
+import { fetchCarById } from 'actions/offerActions'
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardActions, CardContent, Button, Typography, Grid } from '@material-ui/core';
 
@@ -27,30 +27,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Offer = ({offer}) => {
-  const [{ _id, name, year, length, seats, description }] = offer;
-  console.log(offer)
+const Offer = ({ offer, FetchByIdFb }) => {
+  useEffect(() => {
+    if (!offer.length) FetchByIdFb()
+  }, [])
+
+
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
- 
-    <Card id={_id} className={classes.root} variant="outlined">
+    <Card id={offer._id} className={classes.root} variant="outlined">
       <CardContent>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
-          {name}
+          {offer.name}
         </Typography>
         <Typography variant="h5" component="h2">
-          {bull} from {year}
+          {bull} from {offer.year}
         </Typography>
         <Typography variant="h5" component="h2">
-          {bull} length: {length}
+          {bull} length: {offer.length}
         </Typography>
         <Typography variant="h5" component="h2">
-          {bull} seats: {seats}
+          {bull} seats: {offer.seats}
         </Typography>
         <Typography className={classes.pos} color="textPrimary">
-          {description}
+          {offer.description}
         </Typography>
       </CardContent>
       <CardActions>
@@ -67,8 +69,16 @@ Offer.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { match: { params: { offerId } } } = ownProps
-  return({
-  offer: state.cars.filter(car => car._id === offerId)
-})}
+  return ({
+    offer: state.cars.filter(car => car._id === offerId)
+  })
+}
 
-export default connect(mapStateToProps)(Offer);
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const { match: { params: { offerId } } } = ownProps
+  return ({
+    FetchByIdFb: () => dispatch(fetchCarById(offerId))
+  })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Offer);
