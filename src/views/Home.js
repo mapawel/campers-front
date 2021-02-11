@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Section from 'templates/Section';
-import CarCards from 'components/molecules/CarCards';
+import CarCards from 'components/organizms/CarCards';
 import AddModalBody from 'components/molecules/AddModalBody';
 
 const useStyles = makeStyles((theme) => ({

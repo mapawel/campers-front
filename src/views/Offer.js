@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchCarById } from 'actions/offerActions'
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardActions, CardContent, Button, Typography, Grid } from '@material-ui/core';
+import { Card, CardActions, CardContent, Button, Typography, GridList, GridListTile } from '@material-ui/core';
+import Section from 'templates/Section'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +24,18 @@ const useStyles = makeStyles((theme) => ({
   },
   grid: {
     padding: '3rem 0',
-  }
+  },
+  galleryBox: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+  gridList: {
+    width: '100%',
+    // height: 450,
+  },
 }));
 
 
@@ -37,28 +49,42 @@ const Offer = ({ offer, FetchByIdFb }) => {
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
-    <Card id={offer._id} className={classes.root} variant="outlined">
-      <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          {offer.name}
-        </Typography>
-        <Typography variant="h5" component="h2">
-          {bull} from {offer.year}
-        </Typography>
-        <Typography variant="h5" component="h2">
-          {bull} length: {offer.length}
-        </Typography>
-        <Typography variant="h5" component="h2">
-          {bull} seats: {offer.seats}
-        </Typography>
-        <Typography className={classes.pos} color="textPrimary">
-          {offer.description}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">details</Button>
-      </CardActions>
-    </Card>
+    <Section>
+      <div className={classes.galleryBox}>
+        <GridList cellHeight={360} className={classes.gridList} cols={3}>
+          {offer.length && offer[0].imagesUrls.map((img, index) => (
+            <GridListTile key={img} cols={1}>
+              <img src={img} alt={`Imager for: ${offer.length && offer[0].name}, nr: ${index + 1}`} />
+            </GridListTile>
+          ))}
+        </GridList>
+      </div>
+
+
+
+      <Card id={offer.length && offer[0]._id} className={classes.root} variant="outlined">
+        <CardContent>
+          <Typography className={classes.title} color="textSecondary" gutterBottom>
+            {offer.length && offer[0].name}
+          </Typography>
+          <Typography variant="h5" component="h2">
+            {bull} from {offer.length && offer[0].year}
+          </Typography>
+          <Typography variant="h5" component="h2">
+            {bull} length: {offer.length && offer[0].length}
+          </Typography>
+          <Typography variant="h5" component="h2">
+            {bull} seats: {offer.length && offer[0].seats}
+          </Typography>
+          <Typography className={classes.pos} color="textPrimary">
+            {offer.length && offer[0].description}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">details</Button>
+        </CardActions>
+      </Card>
+    </Section>
   );
 };
 

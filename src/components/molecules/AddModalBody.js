@@ -129,7 +129,7 @@ const AddModalBody = ({ close, addFn }) => {
           multiple
           type="file"
           name="images"
-          onChange={handleAddImages}
+          onChange={(e) => handleAddImages(e)}
         />
         <label htmlFor="images">
           <Button variant="contained" component="span">

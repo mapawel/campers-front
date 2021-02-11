@@ -53,25 +53,24 @@ export const fetchCarById = (carId) => (async (dispatch) => {
 
 
 export const addCar = (car) => (async (dispatch) => {
+  const formData = new FormData();
+  const { name, year, seats, length, description, images } = car;
+  formData.append('name', name);
+  formData.append('year', year);
+  formData.append('length', length);
+  formData.append('seats', seats);
+  formData.append('description', description);
+  Object.keys(images).forEach(img => formData.append('images', images[img]))
+
   try {
     dispatch({
       type: ADD_CAR_REQUESTED,
       payload: 'Updating data...',
     })
-    const { name, year, seats, length, description, images } = car
-    console.log(images)
     const response = await axios({
       method: 'POST',
       url: '/api/offer/car',
-      headerd: 'Content-Type: "application/json"',
-      data: {
-        name,
-        year,
-        length,
-        seats,
-        description,
-        images,
-      }
+      data: formData,
     })
     console.log(response)
     dispatch({

@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "..\\..\\..\\..\\Desktop\\06-frontend-uploading-images"
 		}
 	],
 	"settings": {
