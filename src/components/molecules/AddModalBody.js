@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import withContext from 'hoc/withContext';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { connect } from 'react-redux';
 import { addCar } from 'actions/offerActions';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, TextField, Button } from '@material-ui/core';
+import { Typography, TextField, Button, Box, IconButton } from '@material-ui/core';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -23,6 +25,18 @@ const useStyles = makeStyles((theme) => ({
       width: '25ch',
     },
   },
+  imgNames: {
+    display: 'block',
+  },
+  imgNamesName: {
+    marginLeft: 5,
+    marginRight: 'auto',
+  },
+  iconButton: {
+    padding: 0,
+    marginRight: 2,
+    marginBottom: '3px',
+  },
 }));
 
 const validationSchema = yup.object({
@@ -36,28 +50,54 @@ const validationSchema = yup.object({
     .required('Year is required'),
 });
 
-const AddModalBody = ({ close, addFn }) => {
+const AddModalBody = ({ context, addFn }) => {
+  const { editedOfferValues, setAddingOpen } = context;
   const classes = useStyles();
-  const [images, setImages] = useState([])
+  const [imagesObjs, setImagesObjs] = useState([])
+  const [uploadingDisabled, setUploadingDisabled] = useState(false)
+
+  useEffect(() => {
+    if (imagesObjs.length >= 10) setUploadingDisabled(true)
+    else setUploadingDisabled(false)
+  }, [imagesObjs])
+
+  const handleAddImages = (e) => {
+    let arr = []
+    if (imagesObjs.length < 10) {
+      const uploadingFiles = e.target.files;
+      Object.keys(uploadingFiles).forEach(file => {
+        if (arr.length < 10)
+          arr.push({
+            id: uploadingFiles[file].name + uploadingFiles[file].size + uploadingFiles[file].lastModified,
+            name: uploadingFiles[file].name,
+            size: uploadingFiles[file].size,
+            file: uploadingFiles[file],
+          })
+      })
+      setImagesObjs([...imagesObjs, ...arr])
+    }
+  }
+
+  const handleRemoveImage = (imgId) => {
+    const filteredImages = imagesObjs.filter(obj => obj.id !== imgId)
+    setImagesObjs(filteredImages)
+  }
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      year: '',
-      seats: '',
-      length: '',
-      description: '',
+      name: editedOfferValues?.name ?? '',
+      year: editedOfferValues?.year ?? '',
+      seats: editedOfferValues?.seats ?? '',
+      length: editedOfferValues?.length ?? '',
+      description: editedOfferValues?.description ?? '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const response = await addFn({...values, images});
-      close()
+      const response = await addFn({ ...values, imagesObjs });
+      setAddingOpen(false)
     },
   });
 
-  const handleAddImages = (e) => {
-    setImages(e.target.files)
-  }
 
 
   return (
@@ -122,28 +162,56 @@ const AddModalBody = ({ close, addFn }) => {
           type="textarea"
           fullWidth
         />
-        <input
-          id="images"
-          accept="image/*"
-          hidden
-          multiple
-          type="file"
-          name="images"
-          onChange={(e) => handleAddImages(e)}
-        />
-        <label htmlFor="images">
-          <Button variant="contained" component="span">
-            Upload photos
+        {!uploadingDisabled &&
+          <>
+            <input
+              id="images"
+              accept="image/*"
+              hidden
+              multiple
+              type="file"
+              name="images"
+              onChange={(e) => handleAddImages(e)}
+            />
+            <label htmlFor="images">
+              <Button
+                variant="contained"
+                component="span">
+                Upload photos
           </Button>
-        </label>
+            </label>
+          </>
+        }
+        {
+          imagesObjs && imagesObjs.map((obj, index) => (
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <IconButton
+                className={classes.iconButton}
+                color="primary"
+                aria-label="upload picture"
+                component="span"
+                onClick={() => handleRemoveImage(obj.id)}>
+                <DeleteForeverIcon />
+              </IconButton>
+              <Typography className={classes.imgNames} variant="caption" >{`${index + 1}.  `}</Typography>
+              <Typography className={classes.imgNamesName} variant="caption" >{obj.name}</Typography>
+              <Typography className={classes.imgNames} variant="caption" >{`${(obj.size / 1024).toFixed(0)} kB`}</Typography>
+            </Box>
+          ))
+        }
 
 
         <Button
           variant="contained"
           color="primary"
           type="submit"
-          disabled={formik.isSubmitting}
-        >ADD</Button>
+          disabled={formik.isSubmitting}>
+          {editedOfferValues ? 'update' : 'add'}
+        </Button>
       </form>
     </div>
   )
@@ -157,5 +225,5 @@ const mapDispatchToProps = (dispatch) => ({
   addFn: async (values) => await dispatch(addCar(values))
 })
 
-export default connect(null, mapDispatchToProps)(AddModalBody);
+export default connect(null, mapDispatchToProps)(withContext(AddModalBody));
 

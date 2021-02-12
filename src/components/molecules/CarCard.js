@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import withContext from 'hoc/withContext';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardActions, CardContent, Button, Typography, CardActionArea, CardMedia } from '@material-ui/core';
@@ -24,9 +25,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CarCard = ({ name, year, length, seats, description, imagesUrls }) => {
+const CarCard = ({ context, id, name, year, length, seats, description, imagesUrls }) => {
+  const { setEditedOfferValues, setAddingOpen } = context;
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
+
+  const handleEditClick = (e) => {
+    e.preventDefault();
+    setAddingOpen(true);
+    setEditedOfferValues({
+      id,
+      name,
+      year,
+      length,
+      seats,
+      description,
+      imagesUrls,
+    })
+  }
+
+
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -54,7 +72,12 @@ const CarCard = ({ name, year, length, seats, description, imagesUrls }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">details</Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={(e) => { handleEditClick(e) }}
+          >edit</Button>
         </CardActions>
       </CardActionArea>
     </Card>
@@ -67,4 +90,4 @@ CarCard.propTypes = {
 };
 
 
-export default CarCard;
+export default withContext(CarCard);

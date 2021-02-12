@@ -42,13 +42,14 @@ const CarCards = ({ cars, fetchAll }) => {
           seats,
           description,
           imagesUrls,
-         }) =>
+        }) =>
           <Grid
             item
             key={_id}
             id={_id}>
             <Link to={`/${_id}`} className={classes.link}>
               <CarCard
+                id={_id}
                 name={name}
                 year={year}
                 length={length}

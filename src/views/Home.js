@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import withContext from 'hoc/withContext';
 import { Button, Modal } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Section from 'templates/Section';
@@ -16,9 +17,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Home = () => {
-  const [isAddingOpen, setAddingOpen] = useState(false)
+const Home = ({context}) => {
+  const { setEditedOfferValues, isAddingOpen, setAddingOpen } = context;
   const classes = useStyles();
+
+  const handleModalOpenClick = () => {
+    setEditedOfferValues(null)
+    setAddingOpen(true)
+  }
 
   return (
     <Section>
@@ -26,7 +32,7 @@ const Home = () => {
         color="primary"
         variant="contained"
         size="large"
-        onClick={() => setAddingOpen(true)}
+        onClick={handleModalOpenClick}
       >add a new car</Button>
       <CarCards />
       <Modal
@@ -36,7 +42,7 @@ const Home = () => {
         aria-describedby="simple-modal-description"
         className={classes.modal}
       >
-        <AddModalBody close={() => setAddingOpen(false)} />
+        <AddModalBody />
       </Modal>
     </Section>
   );
@@ -48,4 +54,4 @@ Home.propTypes = {
 };
 
 
-export default Home;
+export default withContext(Home);

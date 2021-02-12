@@ -54,13 +54,13 @@ export const fetchCarById = (carId) => (async (dispatch) => {
 
 export const addCar = (car) => (async (dispatch) => {
   const formData = new FormData();
-  const { name, year, seats, length, description, images } = car;
+  const { name, year, seats, length, description, imagesObjs } = car;
   formData.append('name', name);
   formData.append('year', year);
   formData.append('length', length);
   formData.append('seats', seats);
   formData.append('description', description);
-  Object.keys(images).forEach(img => formData.append('images', images[img]))
+  imagesObjs.forEach(img => formData.append('images', img.file))
 
   try {
     dispatch({
