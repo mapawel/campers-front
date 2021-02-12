@@ -2,6 +2,9 @@ import axios from 'axios';
 export const ADD_CAR_REQUESTED = 'ADD_CAR_REQUESTED';
 export const ADD_CAR_SUCCESS = 'ADD_CAR_SUCCESS';
 export const ADD_CAR_ERROR = 'ADD_CAR_ERROR';
+export const UPDATE_CAR_REQUESTED = 'UPDATE_CAR_REQUESTED';
+export const UPDATE_CAR_SUCCESS = 'UPDATE_CAR_SUCCESS';
+export const UPDATE_CAR_ERROR = 'UPDATE_CAR_ERROR';
 export const STARTFETCH_CAR_REQUESTED = 'STARTFETCH_CAR_REQUESTED';
 export const STARTFETCH_CAR_SUCCESS = 'STARTFETCH_CAR_SUCCESS';
 export const STARTFETCH_CAR_ERROR = 'STARTFETCH_CAR_ERROR';
@@ -52,37 +55,63 @@ export const fetchCarById = (carId) => (async (dispatch) => {
 })
 
 
-export const addCar = (car) => (async (dispatch) => {
+export const addOrUpdateCar = (car) => (async (dispatch) => {
   const formData = new FormData();
-  const { name, year, seats, length, description, imagesObjs } = car;
+  const { id, name, year, seats, length, description, imagesObjs, currendImagesUrls, updating } = car;
   formData.append('name', name);
   formData.append('year', year);
   formData.append('length', length);
   formData.append('seats', seats);
   formData.append('description', description);
   imagesObjs.forEach(img => formData.append('images', img.file))
-
-  try {
-    dispatch({
-      type: ADD_CAR_REQUESTED,
-      payload: 'Updating data...',
-    })
-    const response = await axios({
-      method: 'POST',
-      url: '/api/offer/car',
-      data: formData,
-    })
-    console.log(response)
-    dispatch({
-      type: ADD_CAR_SUCCESS,
-      payload: [response.data.car]
-    })
-    return response
-  } catch (err) {
-    dispatch({
-      type: ADD_CAR_ERROR,
-      payload: err.message
-    })
-    return err
+  if (updating) {
+    formData.append('id', id);
+    formData.append('currendImagesUrls', currendImagesUrls);
+    console.log(car)
+    try {
+      dispatch({
+        type: UPDATE_CAR_REQUESTED,
+        payload: 'Updating requestes data...',
+      })
+      const response = await axios({
+        method: 'PUT',
+        url: `/api/offer/car/${id}`,
+        data: formData,
+      })
+      dispatch({
+        type: UPDATE_CAR_SUCCESS,
+        payload: [response.data.car]
+      })
+      return response
+    } catch (err) {
+      dispatch({
+        type: UPDATE_CAR_ERROR,
+        payload: err.message
+      })
+      return err
+    }
+  } else {
+    try {
+      dispatch({
+        type: ADD_CAR_REQUESTED,
+        payload: 'Updating data...',
+      })
+      const response = await axios({
+        method: 'POST',
+        url: '/api/offer/car',
+        data: formData,
+      })
+      dispatch({
+        type: ADD_CAR_SUCCESS,
+        payload: [response.data.car]
+      })
+      return response
+    } catch (err) {
+      dispatch({
+        type: ADD_CAR_ERROR,
+        payload: err.message
+      })
+      return err
+    }
   }
 })

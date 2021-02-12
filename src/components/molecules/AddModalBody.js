@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { connect } from 'react-redux';
-import { addCar } from 'actions/offerActions';
+import { addOrUpdateCar } from 'actions/offerActions';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, TextField, Button, Box, IconButton } from '@material-ui/core';
+import { Typography, TextField, Button, Box, IconButton, GridList, GridListTile, GridListTileBar } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +37,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 2,
     marginBottom: '3px',
   },
+  iconButtonOnImg: {
+    padding: 4,
+  },
+  imagesBox: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
 }));
 
 const validationSchema = yup.object({
@@ -51,22 +61,26 @@ const validationSchema = yup.object({
 });
 
 const AddModalBody = ({ context, addFn }) => {
+  const startUploadImageLimit = 10;
   const { editedOfferValues, setAddingOpen } = context;
   const classes = useStyles();
+  const [uploadImagesLimit, setUploadImagesLimit] = useState(startUploadImageLimit);
+  const [currendImagesUrls, setCurrendImagesUrls] = useState(editedOfferValues?.imagesUrls ?? [])
   const [imagesObjs, setImagesObjs] = useState([])
-  const [uploadingDisabled, setUploadingDisabled] = useState(false)
+  const [uploadingAllowed, setUploadingAllowed] = useState(true)
 
   useEffect(() => {
-    if (imagesObjs.length >= 10) setUploadingDisabled(true)
-    else setUploadingDisabled(false)
-  }, [imagesObjs])
+    setUploadImagesLimit(startUploadImageLimit - currendImagesUrls.length - imagesObjs.length);
+    if (uploadImagesLimit <= 0) setUploadingAllowed(false)
+    else setUploadingAllowed(true)
+  }, [imagesObjs, currendImagesUrls, uploadImagesLimit])
 
   const handleAddImages = (e) => {
     let arr = []
-    if (imagesObjs.length < 10) {
+    if (uploadingAllowed) {
       const uploadingFiles = e.target.files;
       Object.keys(uploadingFiles).forEach(file => {
-        if (arr.length < 10)
+        if (arr.length < uploadImagesLimit)
           arr.push({
             id: uploadingFiles[file].name + uploadingFiles[file].size + uploadingFiles[file].lastModified,
             name: uploadingFiles[file].name,
@@ -79,8 +93,10 @@ const AddModalBody = ({ context, addFn }) => {
   }
 
   const handleRemoveImage = (imgId) => {
-    const filteredImages = imagesObjs.filter(obj => obj.id !== imgId)
-    setImagesObjs(filteredImages)
+    const filteredImages = imagesObjs.filter(obj => obj.id !== imgId);
+    const filteredCurrentImagesUrls = currendImagesUrls.filter(url => url !== imgId);
+    setImagesObjs(filteredImages);
+    setCurrendImagesUrls(filteredCurrentImagesUrls)
   }
 
   const formik = useFormik({
@@ -93,7 +109,13 @@ const AddModalBody = ({ context, addFn }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const response = await addFn({ ...values, imagesObjs });
+      const response = await addFn({
+        ...values,
+        imagesObjs,
+        currendImagesUrls,
+        updating: editedOfferValues ? true : false,
+        id: editedOfferValues?.id,
+      });
       setAddingOpen(false)
     },
   });
@@ -162,7 +184,7 @@ const AddModalBody = ({ context, addFn }) => {
           type="textarea"
           fullWidth
         />
-        {!uploadingDisabled &&
+        {uploadingAllowed &&
           <>
             <input
               id="images"
@@ -178,9 +200,34 @@ const AddModalBody = ({ context, addFn }) => {
                 variant="contained"
                 component="span">
                 Upload photos
-          </Button>
+              </Button>
             </label>
           </>
+        }
+        <Typography>{uploadImagesLimit > 0 ? `you can add ${uploadImagesLimit} photos more` : 'no more photos allowed'}</Typography>
+        {editedOfferValues &&
+          <div className={classes.imagesBox}>
+            <GridList cellHeight={100} className={classes.gridList} cols={3}>
+              {currendImagesUrls.map((tile) => (
+                <GridListTile key={tile} cols={1}>
+                  <img src={tile} alt={tile} />
+                  <GridListTileBar
+                    actionIcon={
+                      <IconButton
+                        className={classes.iconButtonOnImg}
+                        color="primary"
+                        aria-label="remove picture"
+                        component="span"
+                        onClick={() => handleRemoveImage(tile)}>
+                        <DeleteForeverIcon
+                          fontSize="large" />
+                      </IconButton>
+                    }
+                  />
+                </GridListTile>
+              ))}
+            </GridList>
+          </div>
         }
         {
           imagesObjs && imagesObjs.map((obj, index) => (
@@ -222,7 +269,7 @@ AddModalBody.propTypes = {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  addFn: async (values) => await dispatch(addCar(values))
+  addFn: async (values) => await dispatch(addOrUpdateCar(values))
 })
 
 export default connect(null, mapDispatchToProps)(withContext(AddModalBody));
