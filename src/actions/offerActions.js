@@ -2,6 +2,9 @@ import axios from 'axios';
 export const ADD_CAR_REQUESTED = 'ADD_CAR_REQUESTED';
 export const ADD_CAR_SUCCESS = 'ADD_CAR_SUCCESS';
 export const ADD_CAR_ERROR = 'ADD_CAR_ERROR';
+export const DELETE_CAR_REQUESTED = 'DELETE_CAR_REQUESTED';
+export const DELETE_CAR_SUCCES = 'DELETE_CAR_SUCCES';
+export const DELETE_CAR_ERROR = 'DELETE_CAR_ERROR';
 export const UPDATE_CAR_REQUESTED = 'UPDATE_CAR_REQUESTED';
 export const UPDATE_CAR_SUCCESS = 'UPDATE_CAR_SUCCESS';
 export const UPDATE_CAR_ERROR = 'UPDATE_CAR_ERROR';
@@ -40,15 +43,35 @@ export const fetchCarById = (carId) => (async (dispatch) => {
       payload: 'Fetching car data...',
     })
     const fetchData = await axios.get(`/api/offer/car/${carId}`);
-    if (fetchData.status === 200) {
-      dispatch({
-        type: FETCH_CARBYID_SUCCESS,
-        payload: fetchData.data.car
-      })
-    }
+    dispatch({
+      type: FETCH_CARBYID_SUCCESS,
+      payload: fetchData.data.car
+    })
   } catch (err) {
     dispatch({
       type: FETCH_CARBYID_ERROR,
+      payload: err.message
+    })
+  }
+})
+
+export const DeleteCarById = (carId) => (async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_CAR_REQUESTED,
+      payload: 'Deleting car data...',
+    })
+    const response = await axios({
+      method: 'DELETE',
+      url: `/api/offer/car/${carId}`,
+    })
+    dispatch({
+      type: DELETE_CAR_SUCCES,
+      payload: response.data.deletedCar
+    })
+  } catch (err) {
+    dispatch({
+      type: DELETE_CAR_ERROR,
       payload: err.message
     })
   }
@@ -65,13 +88,11 @@ export const addOrUpdateCar = (car) => (async (dispatch) => {
   formData.append('description', description);
   imagesObjs.forEach(img => formData.append('images', img.file))
   if (updating) {
-    formData.append('id', id);
-    formData.append('currendImagesUrls', currendImagesUrls);
-    console.log(car)
+    if (currendImagesUrls.length) formData.append('currendImagesUrls', currendImagesUrls);
     try {
       dispatch({
         type: UPDATE_CAR_REQUESTED,
-        payload: 'Updating requestes data...',
+        payload: 'Updating requested data...',
       })
       const response = await axios({
         method: 'PUT',
@@ -80,7 +101,7 @@ export const addOrUpdateCar = (car) => (async (dispatch) => {
       })
       dispatch({
         type: UPDATE_CAR_SUCCESS,
-        payload: [response.data.car]
+        payload: response.data.updatedCar
       })
       return response
     } catch (err) {

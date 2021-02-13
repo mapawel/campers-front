@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { DeleteCarById } from 'actions/offerActions';
 import withContext from 'hoc/withContext';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CarCard = ({ context, id, name, year, length, seats, description, imagesUrls }) => {
+const CarCard = ({ context, id, name, year, length, seats, description, imagesUrls, deleteFn }) => {
   const { setEditedOfferValues, setAddingOpen } = context;
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -42,6 +44,11 @@ const CarCard = ({ context, id, name, year, length, seats, description, imagesUr
       description,
       imagesUrls,
     })
+  }
+
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    deleteFn(id)
   }
 
 
@@ -78,6 +85,12 @@ const CarCard = ({ context, id, name, year, length, seats, description, imagesUr
             color="secondary"
             onClick={(e) => { handleEditClick(e) }}
           >edit</Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={(e) => { handleDeleteClick(e) }}
+          >delete</Button>
         </CardActions>
       </CardActionArea>
     </Card>
@@ -89,5 +102,8 @@ CarCard.propTypes = {
 
 };
 
+const mapDispatchToProps = dispatch => ({
+  deleteFn: (carId) => dispatch(DeleteCarById(carId))
+})
 
-export default withContext(CarCard);
+export default connect(null, mapDispatchToProps)(withContext(CarCard));
