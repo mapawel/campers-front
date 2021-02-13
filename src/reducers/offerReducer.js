@@ -2,7 +2,8 @@ import { toast } from 'react-toastify';
 import { ADD_CAR_REQUESTED, ADD_CAR_SUCCESS, ADD_CAR_ERROR, STARTFETCH_CAR_REQUESTED, STARTFETCH_CAR_SUCCESS, STARTFETCH_CAR_ERROR, FETCH_CARBYID_REQUESTED, FETCH_CARBYID_SUCCESS, FETCH_CARBYID_ERROR, UPDATE_CAR_REQUESTED, UPDATE_CAR_SUCCESS, UPDATE_CAR_ERROR, DELETE_CAR_REQUESTED, DELETE_CAR_SUCCES, DELETE_CAR_ERROR } from 'actions/offerActions'
 
 const initialState = {
-  cars: []
+  cars: [],
+  carsQty: 0,
 }
 
 const offerReducer = (state = initialState, { type, payload }) => {
@@ -14,7 +15,8 @@ const offerReducer = (state = initialState, { type, payload }) => {
       toast.success('Data fetched from db')
       return {
         ...state,
-        cars: [...payload]
+        cars: [...state.cars, ...payload.cars],
+        carsQty: payload.carsQty
       }
     case STARTFETCH_CAR_ERROR:
       toast.error(payload)
@@ -42,7 +44,7 @@ const offerReducer = (state = initialState, { type, payload }) => {
       toast.success('Data updated')
       return {
         ...state,
-        cars: [...state.cars, ...payload]
+        cars: [...payload, ...state.cars]
       }
     case ADD_CAR_ERROR:
       toast.error(payload)

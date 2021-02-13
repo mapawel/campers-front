@@ -14,11 +14,18 @@ import {
 const Root = () => {
   const [isAddingOpen, setAddingOpen] = useState(false)
   const [editedOfferValues, setEditedOfferValues] = useState(null)
+  const [alredyShowed, setAlredyShowed] = useState(0)
+  const [pageToShow, setPageToShow] = useState(1)
+
   const context = {
     isAddingOpen,
     setAddingOpen,
     editedOfferValues,
     setEditedOfferValues,
+    alredyShowed,
+    setAlredyShowed,
+    pageToShow,
+    setPageToShow,
   }
 
   return (

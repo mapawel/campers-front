@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import debounce from 'lodash/debounce';
+import withContext from 'hoc/withContext';
 import { connect } from 'react-redux';
 import { startFetchCars } from 'actions/offerActions'
 import PropTypes from 'prop-types';
@@ -17,12 +19,55 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const CarCards = ({ cars, fetchAll }) => {
+const CarCards = ({ cars, carsQty, fetchAll, context }) => {
+  const { alredyShowed, setAlredyShowed, pageToShow, setPageToShow } = context;
   const classes = useStyles();
+  const [screenYpossition, setScreenYpossition] = useState()
+  const [clientHeight, setClientHeight] = useState()
+  const [documentHeight, setDocumentHeight] = useState()
+  const [canFetch, setCanFetch] = useState(true)
 
   useEffect(() => {
-    fetchAll()
-  }, [])
+    const fetch = async () => {
+      setCanFetch(false)
+      const done = await fetchAll(pageToShow)
+      setCanFetch(true)
+      setAlredyShowed(pageToShow)
+    }
+    if (pageToShow !== alredyShowed) fetch()
+  }, [pageToShow])
+
+  useEffect(() => {
+    if (carsQty - cars.length <= 0 && carsQty !== 0) {
+      setCanFetch(false)
+    }
+  }, [cars, carsQty, pageToShow])
+
+  useEffect(() => {
+    if (canFetch) {
+      const whenDownloadMargin = 0;
+      if (documentHeight - clientHeight - screenYpossition <= whenDownloadMargin) {
+        setPageToShow(pageToShow + 1)
+      }
+    }
+  }, [screenYpossition, clientHeight, documentHeight, canFetch])
+
+  useEffect(() => {
+    const checkScreenParams = () => {
+      let docHeight = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight,
+        document.body.clientHeight, document.documentElement.clientHeight
+      );
+      setScreenYpossition(window.pageYOffset)
+      setClientHeight(document.documentElement.clientHeight)
+      setDocumentHeight(docHeight)
+    }
+
+    window.addEventListener('scroll', debounce(checkScreenParams, 200))
+    window.addEventListener('resize', debounce(checkScreenParams, 500))
+    checkScreenParams()
+  }, [cars])
 
   return (
     <Grid
@@ -34,6 +79,10 @@ const CarCards = ({ cars, fetchAll }) => {
       className={classes.grid}
     >
       <>
+        {console.log('screenYpossition', screenYpossition)}
+        {console.log('clientHeight', clientHeight)}
+        {console.log('documentHeight', documentHeight)}
+        {console.log('carsQty', carsQty)}
         {cars.map(({
           _id,
           name,
@@ -71,8 +120,11 @@ Card.propTypes = {
 
 };
 
-const mapStateToProps = (state) => ({ cars: state.cars })
-const mapDispatchToProps = (disatch) => ({
-  fetchAll: () => disatch(startFetchCars())
+const mapStateToProps = (state) => ({
+  cars: state.cars,
+  carsQty: state.carsQty,
 })
-export default connect(mapStateToProps, mapDispatchToProps)(CarCards);
+const mapDispatchToProps = (disatch) => ({
+  fetchAll: async (page) => await disatch(startFetchCars(page))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(withContext(CarCards));
