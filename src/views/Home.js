@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import withContext from 'hoc/withContext';
-import { Button, Modal } from '@material-ui/core';
+import { Fab, Modal } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import Section from 'templates/Section';
 import CarCards from 'components/organizms/CarCards';
@@ -14,10 +15,16 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  fab: {
+    position: 'fixed',
+    bottom: 20,
+    right: 20,
+    zIndex: 9,
+  },
 }));
 
 
-const Home = ({context}) => {
+const Home = ({ context }) => {
   const { setEditedOfferValues, isAddingOpen, setAddingOpen } = context;
   const classes = useStyles();
 
@@ -28,12 +35,13 @@ const Home = ({context}) => {
 
   return (
     <Section>
-      <Button
+      <Fab
         color="primary"
-        variant="contained"
-        size="large"
-        onClick={handleModalOpenClick}
-      >add a new car</Button>
+        aria-label="add"
+        className={classes.fab}
+        onClick={handleModalOpenClick}>
+        <AddIcon />
+      </Fab>
       <CarCards />
       <Modal
         open={isAddingOpen}

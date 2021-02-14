@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify';
-import { ADD_CAR_REQUESTED, ADD_CAR_SUCCESS, ADD_CAR_ERROR, STARTFETCH_CAR_REQUESTED, STARTFETCH_CAR_SUCCESS, STARTFETCH_CAR_ERROR, FETCH_CARBYID_REQUESTED, FETCH_CARBYID_SUCCESS, FETCH_CARBYID_ERROR, UPDATE_CAR_REQUESTED, UPDATE_CAR_SUCCESS, UPDATE_CAR_ERROR, DELETE_CAR_REQUESTED, DELETE_CAR_SUCCES, DELETE_CAR_ERROR } from 'actions/offerActions'
+import moment from 'moment';
+import { ADD_CAR_REQUESTED, ADD_CAR_SUCCESS, ADD_CAR_ERROR, STARTFETCH_CAR_REQUESTED, STARTFETCH_CAR_SUCCESS, STARTFETCH_CAR_ERROR, RESTFETCH_CAR_REQUESTED, RESTFETCH_CAR_SUCCESS, RESTFETCH_CAR_ERROR, FETCH_CARBYID_REQUESTED, FETCH_CARBYID_SUCCESS, FETCH_CARBYID_ERROR, UPDATE_CAR_REQUESTED, UPDATE_CAR_SUCCESS, UPDATE_CAR_ERROR, DELETE_CAR_REQUESTED, DELETE_CAR_SUCCES, DELETE_CAR_ERROR } from 'actions/offerActions'
 
 const initialState = {
   cars: [],
@@ -15,10 +16,25 @@ const offerReducer = (state = initialState, { type, payload }) => {
       toast.success('Data fetched from db')
       return {
         ...state,
-        cars: [...state.cars, ...payload.cars],
+        cars: [...payload.cars],
         carsQty: payload.carsQty
       }
     case STARTFETCH_CAR_ERROR:
+      toast.error(payload)
+      return state
+
+
+    case RESTFETCH_CAR_REQUESTED:
+      toast(payload)
+      return state
+    case RESTFETCH_CAR_SUCCESS:
+      toast.success('Data fetched from db')
+      return {
+        ...state,
+        cars: [...state.cars, ...payload.cars].sort((x, y) => new Date(y.createdAt).getTime() - new Date(x.createdAt).getTime()),
+        carsQty: payload.carsQty
+      }
+    case RESTFETCH_CAR_ERROR:
       toast.error(payload)
       return state
 

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CarCard = ({ context, id, name, year, length, seats, description, imagesUrls, deleteFn }) => {
+const CarCard = ({ context, id, name, year, length, seats, description, imagesUrls, createdAt, deleteFn }) => {
   const { setEditedOfferValues, setAddingOpen } = context;
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -64,6 +64,9 @@ const CarCard = ({ context, id, name, year, length, seats, description, imagesUr
         <CardContent>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
             {name}
+          </Typography>
+          <Typography className={classes.title} color="textSecondary" gutterBottom>
+            {createdAt}
           </Typography>
           <Typography variant="h5" component="h2">
             {bull} from {year}
