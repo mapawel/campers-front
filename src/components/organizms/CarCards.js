@@ -28,6 +28,9 @@ const CarCards = ({ cars, carsQty, fetchAll, context }) => {
   const [canFetch, setCanFetch] = useState(true)
 
   useEffect(() => {
+
+    console.log('TEST')
+
     const fetch = async () => {
       setCanFetch(false)
       const done = await fetchAll(pageToShow)
