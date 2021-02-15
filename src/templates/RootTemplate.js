@@ -7,6 +7,7 @@ import muiTheme from 'themes/muiTheme';
 import GlobalStyle from 'themes/GlobalStyle';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'templates/toastify.css';
 
 
 const RootTemplate = ({ children }) => {
@@ -15,7 +16,9 @@ const RootTemplate = ({ children }) => {
       <ThemeProvider theme={muiTheme} >
         <GlobalStyle />
         {children}
-        <ToastContainer />
+        <ToastContainer
+        autoClose={2000}
+        />
       </ThemeProvider>
     </Provider>
   );

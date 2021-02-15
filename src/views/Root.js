@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import AppContext from 'context';
 import RootTemplate from 'templates/RootTemplate';
 import Home from 'views/Home';
+import SignInUp from 'views/SignInUp';
 import Offer from 'views/Offer';
 import Navbar from 'components/organizms/Navbar';
 import {
@@ -9,6 +10,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import routes from 'routes';
 
 
 const Root = () => {
@@ -28,11 +30,23 @@ const Root = () => {
         <Router>
           <Navbar />
           <Switch>
-            <Route exact path='/'>
+            <Route exact path={routes.home}>
               <Home />
             </Route>
             <Route
-              path='/:offerId'
+              path={routes.signup}
+              children={({ match }) => (
+                <SignInUp match={match} />
+              )}
+            >
+            </Route>
+            <Route path={routes.login}
+              children={({ match }) => (
+                <SignInUp match={match} />
+              )}>
+            </Route>
+            <Route
+              path={routes.offer}
               children={({ match }) => (
                 <Offer match={match} />
               )}

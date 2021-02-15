@@ -1,18 +1,25 @@
 import React from 'react'
-import styled from 'styled-components';
 import { Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx'
 
-const StyledSectionWrapper = styled.div`
-  padding: 3rem 0;
-`
 
-export const Section = ({ children }) => {
+const useStyles = makeStyles((theme) => ({
+  section: {
+    padding: '3rem 0',
+  },
+}))
+
+
+export const Section = ({ children, className }) => {
+  const classes = useStyles()
+
   return (
-    <StyledSectionWrapper>
+    <section className={clsx(classes.section, className)}>
       <Container>
         {children}
       </Container>
-    </StyledSectionWrapper>
+    </section>
   )
 }
 
