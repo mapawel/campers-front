@@ -44,8 +44,8 @@ export const startFetchCars = (elements = 10) => (async (dispatch) => {
 })
 
 export const restFetchCars = (elements = 5, onlyNew) => (async (dispatch, getState) => {
-  let offersDateArr = getState().cars.map(car => moment.utc(new Date(car.createdAt)).format('x')*1);
-  if (!getState().cars.length) offersDateArr = [new Date().getTime()*1]
+  let offersDateArr = getState().offers.cars.map(car => moment.utc(new Date(car.createdAt)).format('x')*1);
+  if (!getState().offers.cars.length) offersDateArr = [new Date().getTime()*1]
   const newest = Math.max(...offersDateArr)
   let oldest = Math.min(...offersDateArr)
   if (onlyNew) oldest = 0

@@ -96,7 +96,7 @@ Offer.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { match: { params: { offerId } } } = ownProps
   return ({
-    offer: state.cars.filter(car => car._id === offerId)
+    offer: state.offers.cars.filter(car => car._id === offerId)
   })
 }
 

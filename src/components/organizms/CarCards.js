@@ -28,11 +28,11 @@ const useStyles = makeStyles((theme) => ({
 
 const CarCards = ({ cars, carsQty, startFetch, restFetch, context }) => {
   const classes = useStyles();
-  const [screenYpossition, setScreenYpossition] = useState()
-  const [clientHeight, setClientHeight] = useState()
-  const [documentHeight, setDocumentHeight] = useState()
-  const [canFetch, setCanFetch] = useState(true)
-  const [isFetching, setIsFetching] = useState(true)
+  const [screenYpossition, setScreenYpossition] = useState();
+  const [clientHeight, setClientHeight] = useState();
+  const [documentHeight, setDocumentHeight] = useState();
+  const [canFetch, setCanFetch] = useState(true);
+  const [isFetching, setIsFetching] = useState(true);
 
   const fetch = async (elements) => {
     setCanFetch(false)
@@ -147,8 +147,8 @@ Card.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  cars: state.cars,
-  carsQty: state.carsQty,
+  cars: state.offers.cars,
+  carsQty: state.offers.carsQty,
 })
 const mapDispatchToProps = (disatch) => ({
   startFetch: async (elements) => await disatch(startFetchCars(elements)),

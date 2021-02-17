@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
 import Section from 'templates/Section';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -11,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import routes from 'routes';
+import { signUpUser } from 'actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const validationSchema = yup.object({
+const signInValidation = {
   email: yup
     .string()
     .email('Enter valid e-mail address')
@@ -52,9 +54,16 @@ const validationSchema = yup.object({
     .string()
     .min(4, 'Minimum 4 characters length')
     .required('field is required'),
-});
+};
 
-const SignInUp = ({ match }) => {
+const plusSignUpValidation = {
+  confirmpass: yup
+    .string()
+    .min(4, 'Minimum 4 characters length')
+    .required('field is required'),
+};
+
+const SignInUp = ({ match, signUpFn }) => {
   let signup = false;
   let login = false;
   if (match.path === routes.signup) signup = true;
@@ -63,12 +72,14 @@ const SignInUp = ({ match }) => {
   const classes = useStyles()
   const formik = useFormik({
     initialValues: {
-      name: '',
+      email: '',
       password: '',
+      confirmpass: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: signup ? yup.object({ ...signInValidation, ...plusSignUpValidation }) : yup.object({ ...signInValidation }),
     onSubmit: async (values) => {
       console.log(values)
+      await signUpFn(values)
       // const response = await addFn(values);
       // setAddingOpen(false)
     },
@@ -128,10 +139,26 @@ const SignInUp = ({ match }) => {
               type="password"
               fullWidth
             />
+            {signup &&
+              <TextField
+                className={classes.input}
+                id="confirmpass"
+                name="confirmpass"
+                value={formik.values.confirmpass}
+                onChange={formik.handleChange}
+                error={formik.touched.confirmpass && Boolean(formik.errors.confirmpass)}
+                helperText={formik.touched.confirmpass && formik.errors.confirmpass}
+                label="Confirm password"
+                variant="outlined"
+                type="password"
+                fullWidth
+              />
+            }
             <Button
               variant="contained"
               color="primary"
               type="submit"
+              disabled={formik.isSubmitting}
               fullWidth
             >
               {signup && 'Sign up'}
@@ -150,5 +177,10 @@ SignInUp.propTypes = {
 
 }
 
-export default SignInUp
+const mapDispatchToProps = dispatch => ({
+  signUpFn: async (values) => await dispatch(signUpUser(values))
+})
+
+
+export default connect(null, mapDispatchToProps)(SignInUp);
 
