@@ -60,7 +60,7 @@ const validationSchema = yup.object({
     .required('Year is required'),
 });
 
-const AddModalBody = ({ context, addFn }) => {
+const AddModalBody = React.forwardRef(({ context, addFn }, ref) => {
   const startUploadImageLimit = 10;
   const { editedOfferValues, setAddingOpen } = context;
   const classes = useStyles();
@@ -123,7 +123,7 @@ const AddModalBody = ({ context, addFn }) => {
 
 
   return (
-    <div className={classes.paper}>
+    <Box className={classes.paper} ref={ref} tabIndex={-1}>
       <Typography variant="h4">Add an offer</Typography>
       <form
         className={classes.form}
@@ -260,9 +260,9 @@ const AddModalBody = ({ context, addFn }) => {
           {editedOfferValues ? 'update' : 'add'}
         </Button>
       </form>
-    </div>
+    </Box>
   )
-}
+})
 
 AddModalBody.propTypes = {
 
@@ -272,5 +272,5 @@ const mapDispatchToProps = (dispatch) => ({
   addFn: async (values) => await dispatch(addOrUpdateCar(values))
 })
 
-export default connect(null, mapDispatchToProps)(withContext(AddModalBody));
+export default connect(null, mapDispatchToProps, null, {forwardRef: true})(withContext(AddModalBody));
 

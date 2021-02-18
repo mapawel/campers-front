@@ -55,47 +55,47 @@ const CarCard = ({ context, id, name, year, length, seats, description, imagesUr
 
   return (
     <Card className={classes.root} variant="outlined">
-      <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image={imagesUrls[0]}
-          title={`Image for: ${name}`}
-        />
-        <CardContent>
-          <Typography className={classes.title} color="textSecondary" gutterBottom>
-            {name}
-          </Typography>
-          <Typography className={classes.title} color="textSecondary" gutterBottom>
-            {createdAt}
-          </Typography>
-          <Typography variant="h5" component="h2">
-            {bull} from {year}
-          </Typography>
-          <Typography variant="h5" component="h2">
-            {bull} length: {length}
-          </Typography>
-          <Typography variant="h5" component="h2">
-            {bull} seats: {seats}
-          </Typography>
-          <Typography className={classes.pos} color="textPrimary">
-            {description}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            size="small"
-            variant="contained"
-            color="secondary"
-            onClick={(e) => { handleEditClick(e) }}
-          >edit</Button>
-          <Button
-            size="small"
-            variant="contained"
-            color="secondary"
-            onClick={(e) => { handleDeleteClick(e) }}
-          >delete</Button>
-        </CardActions>
-      </CardActionArea>
+      <CardMedia
+        className={classes.media}
+        image={imagesUrls[0]}
+        src={imagesUrls[0]}
+        title={`Image for: ${name}`}
+        component="div"
+      />
+      <CardContent>
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          {name}
+        </Typography>
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          {createdAt}
+        </Typography>
+        <Typography variant="h5" component="h2">
+          {bull} from {year}
+        </Typography>
+        <Typography variant="h5" component="h2">
+          {bull} length: {length}
+        </Typography>
+        <Typography variant="h5" component="h2">
+          {bull} seats: {seats}
+        </Typography>
+        <Typography className={classes.pos} color="textPrimary">
+          {description}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          variant="contained"
+          color="secondary"
+          onClick={(e) => { handleEditClick(e) }}
+        >edit</Button>
+        <Button
+          size="small"
+          variant="contained"
+          color="secondary"
+          onClick={(e) => { handleDeleteClick(e) }}
+        >delete</Button>
+      </CardActions>
     </Card>
   );
 };

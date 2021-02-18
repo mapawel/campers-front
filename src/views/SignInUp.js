@@ -99,9 +99,9 @@ const SignInUp = ({ match, signUpFn }) => {
           <form
             className={classes.form}
             display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
+            flexdirection="column"
+            justifycontent="center"
+            alignitems="center"
             noValidate
             autoComplete="off"
             onSubmit={formik.handleSubmit}

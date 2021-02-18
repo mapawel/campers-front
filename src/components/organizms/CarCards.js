@@ -55,6 +55,9 @@ const CarCards = ({ cars, carsQty, startFetch, restFetch, context }) => {
       if (!cars.length) fetch(5)
       else fetchRest(5, true)
     }
+
+
+    return () => setCanFetch(false)
   }, [])
 
   useEffect(() => {
@@ -72,12 +75,18 @@ const CarCards = ({ cars, carsQty, startFetch, restFetch, context }) => {
     window.addEventListener('scroll', debounce(checkScreenParams, 200))
     window.addEventListener('resize', debounce(checkScreenParams, 500))
     checkScreenParams()
+
+    return () => {
+      window.removeEventListener('scroll', debounce(checkScreenParams, 200))
+      window.removeEventListener('resize', debounce(checkScreenParams, 500))
+    }
   }, [cars])
 
   useEffect(() => {
     if (carsQty - cars.length <= 0 && carsQty !== 0) {
       setCanFetch(false)
     }
+
   }, [cars, carsQty])
 
   useEffect(() => {

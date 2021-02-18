@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import withContext from 'hoc/withContext';
-import { Fab, Modal } from '@material-ui/core';
+import { Fab, Modal, DialogContent } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import Section from 'templates/Section';
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const Home = ({ context }) => {
   const { setEditedOfferValues, isAddingOpen, setAddingOpen } = context;
   const classes = useStyles();
+  const ref = React.createRef();
 
   const handleModalOpenClick = () => {
     setEditedOfferValues(null)
@@ -50,7 +51,7 @@ const Home = ({ context }) => {
         aria-describedby="simple-modal-description"
         className={classes.modal}
       >
-        <AddModalBody />
+        <AddModalBody ref={ref} />
       </Modal>
     </Section>
   );

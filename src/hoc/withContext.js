@@ -4,18 +4,18 @@ import PropTypes from 'prop-types';
 
 
 const withContext = (Component) => (
-  (props) => (
+  React.forwardRef((props, ref) => (
     <AppContext.Consumer>
       {(context) => (
         <>
-          <Component context={context} {...props} />
+          <Component context={context} {...props} ref={ref} />
         </>
       )}
 
     </AppContext.Consumer >
   )
 
-)
+  ))
 
 
 
