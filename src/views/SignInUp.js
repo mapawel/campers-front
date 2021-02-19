@@ -13,6 +13,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import routes from 'routes';
 import { signUpUser } from 'actions/authActions';
+import { logInUser } from 'actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -63,7 +64,7 @@ const plusSignUpValidation = {
     .required('field is required'),
 };
 
-const SignInUp = ({ match, signUpFn }) => {
+const SignInUp = ({ match, signUpFn, logInFn }) => {
   let signup = false;
   let login = false;
   if (match.path === routes.signup) signup = true;
@@ -77,11 +78,17 @@ const SignInUp = ({ match, signUpFn }) => {
       confirmpass: '',
     },
     validationSchema: signup ? yup.object({ ...signInValidation, ...plusSignUpValidation }) : yup.object({ ...signInValidation }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, {resetForm}) => {
       console.log(values)
-      await signUpFn(values)
-      // const response = await addFn(values);
-      // setAddingOpen(false)
+      if (signup) {
+      const response = await signUpFn(values)
+      if(response.status === 201) resetForm()
+      }
+      if (login) {
+      const response = await logInFn(values)
+      if(response.status === 201) resetForm()
+      }
+
     },
   });
 
@@ -178,7 +185,8 @@ SignInUp.propTypes = {
 }
 
 const mapDispatchToProps = dispatch => ({
-  signUpFn: async (values) => await dispatch(signUpUser(values))
+  signUpFn: async (values) => await dispatch(signUpUser(values)),
+  logInFn: async (values) => await dispatch(logInUser(values)),
 })
 
 

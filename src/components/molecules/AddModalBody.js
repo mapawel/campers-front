@@ -232,6 +232,7 @@ const AddModalBody = React.forwardRef(({ context, addFn }, ref) => {
         {
           imagesObjs && imagesObjs.map((obj, index) => (
             <Box
+              key={obj.id}
               display="flex"
               justifyContent="space-between"
               alignItems="center"

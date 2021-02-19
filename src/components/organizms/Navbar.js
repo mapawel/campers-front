@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -24,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Navbar() {
+function Navbar({ loggedUserd }) {
   const classes = useStyles()
   return (
     <ul className={classes.menuList}>
@@ -54,5 +56,9 @@ Navbar.propTypes = {
 
 }
 
-export default Navbar
+const mapStateToProps = (state) => ({
+  loggedUserd: state.auth.userId,
+})
+
+export default connect(mapStateToProps)(Navbar)
 

@@ -63,7 +63,9 @@ const offerReducer = (state = initialState, { type, payload }) => {
         cars: [...payload, ...state.cars]
       }
     case ADD_CAR_ERROR:
-      toast.error(payload)
+      toast.error(
+        `${payload.errorMessage}: ${payload.errorValidationErrors ? payload.errorValidationErrors?.map(err => ` ${err.msg}`) : '...'}`
+        , { autoClose: 15000 })
       return state
 
 
@@ -80,7 +82,9 @@ const offerReducer = (state = initialState, { type, payload }) => {
         })],
       }
     case UPDATE_CAR_ERROR:
-      toast.error(payload)
+      toast.error(
+        `${payload.errorMessage}: ${payload.errorValidationErrors ? payload.errorValidationErrors?.map(err => ` ${err.msg}`) : '...'}`
+        , { autoClose: 15000 })
       return state
 
 
@@ -97,7 +101,7 @@ const offerReducer = (state = initialState, { type, payload }) => {
       toast.error(payload)
       return state
 
-      
+
     default:
       return state
   }
