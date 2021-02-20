@@ -3,6 +3,7 @@ import { SIGNUP_REQUESTED, SIGNUP_SUCCESS, SIGNUP_ERROR, LOGIN_REQUESTED, LOGIN_
 
 const initialState = {
   userId: null,
+  token: null,
 }
 
 const authReducer = (state = initialState, { type, payload }) => {
@@ -30,7 +31,8 @@ const authReducer = (state = initialState, { type, payload }) => {
       toast.success('Logged in!')
       return {
         ...state,
-        userId: payload,
+        userId: payload.userId,
+        token: payload.token,
       }
     case LOGIN_ERROR:
       toast.error(

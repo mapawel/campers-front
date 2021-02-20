@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const CarCards = ({ cars, carsQty, startFetch, restFetch, context }) => {
+const CarCards = ({ cars, carsQty, startFetch, restFetch }) => {
   const classes = useStyles();
   const [screenYpossition, setScreenYpossition] = useState();
   const [clientHeight, setClientHeight] = useState();
@@ -55,8 +55,6 @@ const CarCards = ({ cars, carsQty, startFetch, restFetch, context }) => {
       if (!cars.length) fetch(5)
       else fetchRest(5, true)
     }
-
-
     return () => setCanFetch(false)
   }, [])
 
@@ -92,7 +90,7 @@ const CarCards = ({ cars, carsQty, startFetch, restFetch, context }) => {
   useEffect(() => {
     if (canFetch) {
       const whenDownloadMargin = 200;
-      if (documentHeight - clientHeight - screenYpossition <= whenDownloadMargin) {
+      if (documentHeight - clientHeight - screenYpossition <= whenDownloadMargin && cars.length) {
         fetchRest(5)
       }
     }

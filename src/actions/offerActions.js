@@ -12,6 +12,9 @@ export const UPDATE_CAR_ERROR = 'UPDATE_CAR_ERROR';
 export const STARTFETCH_CAR_REQUESTED = 'STARTFETCH_CAR_REQUESTED';
 export const STARTFETCH_CAR_SUCCESS = 'STARTFETCH_CAR_SUCCESS';
 export const STARTFETCH_CAR_ERROR = 'STARTFETCH_CAR_ERROR';
+export const FETCH_USERS_CAR_REQUESTED = 'FETCH_USERS_CAR_REQUESTED';
+export const FETCH_USERS_CAR_SUCCESS = 'FETCH_USERS_CAR_SUCCESS';
+export const FETCH_USERS_CAR_ERROR = 'FETCH_USERS_CAR_ERROR';
 export const RESTFETCH_CAR_REQUESTED = 'RESTFETCH_CAR_REQUESTED';
 export const RESTFETCH_CAR_SUCCESS = 'RESTFETCH_CAR_SUCCESS';
 export const RESTFETCH_CAR_ERROR = 'RESTFETCH_CAR_ERROR';
@@ -19,13 +22,16 @@ export const FETCH_CARBYID_REQUESTED = 'FETCH_CARBYID_REQUESTED';
 export const FETCH_CARBYID_SUCCESS = 'FETCH_CARBYID_SUCCESS';
 export const FETCH_CARBYID_ERROR = 'FETCH_CARBYID_ERROR';
 
-export const startFetchCars = (elements = 10) => (async (dispatch) => {
+export const startFetchCars = (elements = 10) => (async (dispatch, getState) => {
   try {
     dispatch({
       type: STARTFETCH_CAR_REQUESTED,
       payload: 'Fetching data...',
     })
-    const fetchData = await axios.get(`/api/offer/cars?elements=${elements}`);
+    const fetchData = await axios({
+      url: `/api/offer/cars?elements=${elements}`,
+      method: 'GET',
+    });
     dispatch({
       type: STARTFETCH_CAR_SUCCESS,
       payload: {
@@ -35,7 +41,7 @@ export const startFetchCars = (elements = 10) => (async (dispatch) => {
     })
     return fetchData
   } catch (err) {
-    console.log(err)
+    console.log(err.response)
     dispatch({
       type: STARTFETCH_CAR_ERROR,
       payload: `${err.message} - ${err.response.data.info}`
@@ -44,9 +50,39 @@ export const startFetchCars = (elements = 10) => (async (dispatch) => {
   }
 })
 
+export const fetchUsersCars = () => (async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: FETCH_USERS_CAR_REQUESTED,
+      payload: 'Fetching users data...',
+    })
+    const fetchData = await axios({
+      url: `/api/offer/userscars`,
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getState().auth.token}`
+      },
+    });
+    dispatch({
+      type: FETCH_USERS_CAR_SUCCESS,
+      payload: {
+        usersCars: fetchData.data.carsRes.usersCars,
+      }
+    })
+    return fetchData
+  } catch (err) {
+    console.log(err.response)
+    dispatch({
+      type: FETCH_USERS_CAR_ERROR,
+      payload: `${err.message} - ${err.response.data.info}`
+    })
+    return err
+  }
+})
+
 export const restFetchCars = (elements = 5, onlyNew) => (async (dispatch, getState) => {
-  let offersDateArr = getState().offers.cars.map(car => moment.utc(new Date(car.createdAt)).format('x')*1);
-  if (!getState().offers.cars.length) offersDateArr = [new Date().getTime()*1]
+  let offersDateArr = getState().offers.cars.map(car => moment.utc(new Date(car.createdAt)).format('x') * 1);
+  if (!getState().offers.cars.length) offersDateArr = [new Date().getTime() * 1]
   const newest = Math.max(...offersDateArr)
   let oldest = Math.min(...offersDateArr)
   if (onlyNew) oldest = 0
@@ -92,7 +128,7 @@ export const fetchCarById = (carId) => (async (dispatch) => {
   }
 })
 
-export const DeleteCarById = (carId) => (async (dispatch) => {
+export const DeleteCarById = (carId) => (async (dispatch, getState) => {
   try {
     dispatch({
       type: DELETE_CAR_REQUESTED,
@@ -101,6 +137,9 @@ export const DeleteCarById = (carId) => (async (dispatch) => {
     const response = await axios({
       method: 'DELETE',
       url: `/api/offer/car/${carId}`,
+      headers: {
+        Authorization: `Bearer ${getState().auth.token}`
+      },
     })
     dispatch({
       type: DELETE_CAR_SUCCES,
@@ -115,7 +154,7 @@ export const DeleteCarById = (carId) => (async (dispatch) => {
 })
 
 
-export const addOrUpdateCar = (car) => (async (dispatch) => {
+export const addOrUpdateCar = (car) => (async (dispatch, getState) => {
   const formData = new FormData();
   const { id, name, year, seats, length, description, imagesObjs, currendImagesUrls, updating } = car;
   formData.append('name', name);
@@ -135,6 +174,9 @@ export const addOrUpdateCar = (car) => (async (dispatch) => {
         method: 'PUT',
         url: `/api/offer/car/${id}`,
         data: formData,
+        headers: {
+          Authorization: `Bearer ${getState().auth.token}`
+        },
       })
       dispatch({
         type: UPDATE_CAR_SUCCESS,
@@ -161,6 +203,9 @@ export const addOrUpdateCar = (car) => (async (dispatch) => {
         method: 'POST',
         url: '/api/offer/car',
         data: formData,
+        headers: {
+          Authorization: `Bearer ${getState().auth.token}`
+        },
       })
       dispatch({
         type: ADD_CAR_SUCCESS,

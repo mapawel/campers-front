@@ -49,7 +49,7 @@ export const logInUser = (values) => (async (dispatch) => {
     });
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: fetchData.data.userId
+      payload: fetchData.data,
     })
     return fetchData
   } catch (err) {

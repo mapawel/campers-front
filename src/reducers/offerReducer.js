@@ -1,9 +1,10 @@
 import { toast } from 'react-toastify';
 import moment from 'moment';
-import { ADD_CAR_REQUESTED, ADD_CAR_SUCCESS, ADD_CAR_ERROR, STARTFETCH_CAR_REQUESTED, STARTFETCH_CAR_SUCCESS, STARTFETCH_CAR_ERROR, RESTFETCH_CAR_REQUESTED, RESTFETCH_CAR_SUCCESS, RESTFETCH_CAR_ERROR, FETCH_CARBYID_REQUESTED, FETCH_CARBYID_SUCCESS, FETCH_CARBYID_ERROR, UPDATE_CAR_REQUESTED, UPDATE_CAR_SUCCESS, UPDATE_CAR_ERROR, DELETE_CAR_REQUESTED, DELETE_CAR_SUCCES, DELETE_CAR_ERROR } from 'actions/offerActions'
+import { ADD_CAR_REQUESTED, ADD_CAR_SUCCESS, ADD_CAR_ERROR, STARTFETCH_CAR_REQUESTED, STARTFETCH_CAR_SUCCESS, STARTFETCH_CAR_ERROR, RESTFETCH_CAR_REQUESTED, RESTFETCH_CAR_SUCCESS, RESTFETCH_CAR_ERROR, FETCH_CARBYID_REQUESTED, FETCH_CARBYID_SUCCESS, FETCH_CARBYID_ERROR, UPDATE_CAR_REQUESTED, UPDATE_CAR_SUCCESS, UPDATE_CAR_ERROR, DELETE_CAR_REQUESTED, DELETE_CAR_SUCCES, DELETE_CAR_ERROR, FETCH_USERS_CAR_REQUESTED, FETCH_USERS_CAR_SUCCESS, FETCH_USERS_CAR_ERROR } from 'actions/offerActions'
 
 const initialState = {
   cars: [],
+  usersCars: [],
   carsQty: 0,
 }
 
@@ -20,6 +21,20 @@ const offerReducer = (state = initialState, { type, payload }) => {
         carsQty: payload.carsQty
       }
     case STARTFETCH_CAR_ERROR:
+      toast.error(payload)
+      return state
+
+
+    case FETCH_USERS_CAR_REQUESTED:
+      toast(payload)
+      return state
+    case FETCH_USERS_CAR_SUCCESS:
+      toast.success('User data fetched from db')
+      return {
+        ...state,
+        usersCars: [...payload.usersCars],
+      }
+    case FETCH_USERS_CAR_ERROR:
       toast.error(payload)
       return state
 

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CarCard = ({ context, id, name, year, length, seats, description, imagesUrls, createdAt, deleteFn }) => {
+const CarCard = ({ context, id, name, year, length, seats, description, imagesUrls, createdAt, deleteFn, userkeys }) => {
   const { setEditedOfferValues, setAddingOpen } = context;
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -82,20 +82,22 @@ const CarCard = ({ context, id, name, year, length, seats, description, imagesUr
           {description}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button
-          size="small"
-          variant="contained"
-          color="secondary"
-          onClick={(e) => { handleEditClick(e) }}
-        >edit</Button>
-        <Button
-          size="small"
-          variant="contained"
-          color="secondary"
-          onClick={(e) => { handleDeleteClick(e) }}
-        >delete</Button>
-      </CardActions>
+      {userkeys &&
+        <CardActions>
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={(e) => { handleEditClick(e) }}
+          >edit</Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={(e) => { handleDeleteClick(e) }}
+          >delete</Button>
+        </CardActions>
+      }
     </Card>
   );
 };

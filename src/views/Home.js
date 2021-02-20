@@ -6,7 +6,10 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import Section from 'templates/Section';
 import CarCards from 'components/organizms/CarCards';
+import MyCarCards from 'components/organizms/MyCarCards';
 import AddModalBody from 'components/molecules/AddModalBody';
+import routes from 'routes'
+
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -24,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Home = ({ context }) => {
+const Home = ({ context, match: { path } }) => {
   const { setEditedOfferValues, isAddingOpen, setAddingOpen } = context;
   const classes = useStyles();
   const ref = React.createRef();
@@ -36,23 +39,30 @@ const Home = ({ context }) => {
 
   return (
     <Section>
-      <Fab
-        color="primary"
-        aria-label="add"
-        className={classes.fab}
-        onClick={handleModalOpenClick}>
-        <AddIcon />
-      </Fab>
-      <CarCards />
-      <Modal
-        open={isAddingOpen}
-        onClose={() => setAddingOpen(false)}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        className={classes.modal}
-      >
-        <AddModalBody ref={ref} />
-      </Modal>
+      {path === routes.myoffers ?
+        (
+          <>
+            <MyCarCards />
+            <Fab
+              color="primary"
+              aria-label="add"
+              className={classes.fab}
+              onClick={handleModalOpenClick}>
+              <AddIcon />
+            </Fab>
+            <Modal
+              open={isAddingOpen}
+              onClose={() => setAddingOpen(false)}
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+              className={classes.modal}
+            >
+              <AddModalBody ref={ref} />
+            </Modal>
+          </>
+        ) : (
+          <CarCards />
+        )}
     </Section>
   );
 };

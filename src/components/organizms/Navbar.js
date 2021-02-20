@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import routes from 'routes';
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -33,19 +34,25 @@ function Navbar({ loggedUserd }) {
       <li><NavLink
         className={classes.link}
         activeClassName={classes.linkActive}
-        exact to='/'>
+        exact to={routes.home}>
         Home
         </NavLink></li>
       <li><NavLink
         className={classes.link}
         activeClassName={classes.linkActive}
-        to='/signup'>
+        exact to={routes.myoffers}>
+        My Offers
+        </NavLink></li>
+      <li><NavLink
+        className={classes.link}
+        activeClassName={classes.linkActive}
+        to={routes.signup}>
         Sign up
         </NavLink></li>
       <li><NavLink
         className={classes.link}
         activeClassName={classes.linkActive}
-        to='/login'>
+        to={routes.login}>
         Log in
         </NavLink></li>
     </ul>

@@ -30,8 +30,20 @@ const Root = () => {
         <Router>
           <Navbar />
           <Switch>
-            <Route exact path={routes.home}>
-              <Home />
+            <Route
+              exact
+              path={routes.home}
+              children={({ match }) => (
+                < Home match={match} />
+              )}
+            >
+            </Route>
+            <Route
+              path={routes.myoffers}
+              children={({ match }) => (
+                < Home match={match} />
+              )}
+            >
             </Route>
             <Route
               path={routes.signup}
@@ -54,7 +66,7 @@ const Root = () => {
           </Switch>
         </Router>
       </RootTemplate>
-    </AppContext.Provider>
+    </AppContext.Provider >
   )
 }
 
