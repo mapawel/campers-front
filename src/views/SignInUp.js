@@ -64,7 +64,7 @@ const plusSignUpValidation = {
     .required('field is required'),
 };
 
-const SignInUp = ({ match, signUpFn, logInFn }) => {
+const SignInUp = ({ match, signUpFn, logInFn, history }) => {
   let signup = false;
   let login = false;
   if (match.path === routes.signup) signup = true;
@@ -78,15 +78,17 @@ const SignInUp = ({ match, signUpFn, logInFn }) => {
       confirmpass: '',
     },
     validationSchema: signup ? yup.object({ ...signInValidation, ...plusSignUpValidation }) : yup.object({ ...signInValidation }),
-    onSubmit: async (values, {resetForm}) => {
-      console.log(values)
+    onSubmit: async (values, { resetForm }) => {
+      let response
       if (signup) {
-      const response = await signUpFn(values)
-      if(response.status === 201) resetForm()
+        response = await signUpFn(values)
       }
       if (login) {
-      const response = await logInFn(values)
-      if(response.status === 201) resetForm()
+        response = await logInFn(values)
+      }
+      if (response.status === 201) {
+        resetForm();
+        history.push(routes.home)
       }
 
     },

@@ -1,8 +1,8 @@
 import { toast } from 'react-toastify';
-import { SIGNUP_REQUESTED, SIGNUP_SUCCESS, SIGNUP_ERROR, LOGIN_REQUESTED, LOGIN_SUCCESS, LOGIN_ERROR } from 'actions/authActions'
+import { SIGNUP_REQUESTED, SIGNUP_SUCCESS, SIGNUP_ERROR, LOGIN_REQUESTED, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT } from 'actions/authActions'
 
 const initialState = {
-  userId: null,
+  userEmail: null,
   token: null,
 }
 
@@ -12,11 +12,8 @@ const authReducer = (state = initialState, { type, payload }) => {
       toast(payload)
       return state
     case SIGNUP_SUCCESS:
-      toast.success('Signed up!')
-      return {
-        ...state,
-        userId: payload,
-      }
+      toast.success(`Signed up user: ${payload}`)
+      return state
     case SIGNUP_ERROR:
       toast.error(
         `${payload.errorMessage}: ${payload.errorValidationErrors && payload.errorValidationErrors.map(err => ` ${err.msg}`)} ${payload.errorInfo && payload.errorInfo}`
@@ -29,9 +26,10 @@ const authReducer = (state = initialState, { type, payload }) => {
       return state
     case LOGIN_SUCCESS:
       toast.success('Logged in!')
+      console.log('reducer payload login: ', payload)
       return {
         ...state,
-        userId: payload.userId,
+        userEmail: payload.userEmail,
         token: payload.token,
       }
     case LOGIN_ERROR:
@@ -41,6 +39,13 @@ const authReducer = (state = initialState, { type, payload }) => {
       return state
 
 
+    case LOGOUT:
+      toast.success('Logged out!')
+      return {
+        ...state,
+        userEmail: null,
+        token: null,
+      }
 
 
     default:

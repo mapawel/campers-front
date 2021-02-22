@@ -47,14 +47,14 @@ const Root = () => {
             </Route>
             <Route
               path={routes.signup}
-              children={({ match }) => (
-                <SignInUp match={match} />
+              children={({ match, history }) => (
+                <SignInUp match={match} history={history} />
               )}
             >
             </Route>
             <Route path={routes.login}
-              children={({ match }) => (
-                <SignInUp match={match} />
+              children={({ match, history }) => (
+                <SignInUp match={match} history={history} />
               )}>
             </Route>
             <Route
@@ -62,12 +62,14 @@ const Root = () => {
               children={({ match }) => (
                 <Offer match={match} />
               )}
-            />
+            >
+            </Route>
           </Switch>
         </Router>
       </RootTemplate>
     </AppContext.Provider >
   )
 }
+
 
 export default Root;

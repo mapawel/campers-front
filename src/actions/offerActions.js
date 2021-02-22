@@ -15,6 +15,7 @@ export const STARTFETCH_CAR_ERROR = 'STARTFETCH_CAR_ERROR';
 export const FETCH_USERS_CAR_REQUESTED = 'FETCH_USERS_CAR_REQUESTED';
 export const FETCH_USERS_CAR_SUCCESS = 'FETCH_USERS_CAR_SUCCESS';
 export const FETCH_USERS_CAR_ERROR = 'FETCH_USERS_CAR_ERROR';
+export const CLEAR_USERS_CAR = 'CLEAR_USERS_CAR';
 export const RESTFETCH_CAR_REQUESTED = 'RESTFETCH_CAR_REQUESTED';
 export const RESTFETCH_CAR_SUCCESS = 'RESTFETCH_CAR_SUCCESS';
 export const RESTFETCH_CAR_ERROR = 'RESTFETCH_CAR_ERROR';
@@ -78,6 +79,12 @@ export const fetchUsersCars = () => (async (dispatch, getState) => {
     })
     return err
   }
+})
+
+export const clearUsersCars = () => ((dispatch, getState) => {
+  dispatch({
+    type: CLEAR_USERS_CAR,
+  })
 })
 
 export const restFetchCars = (elements = 5, onlyNew) => (async (dispatch, getState) => {

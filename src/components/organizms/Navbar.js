@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import routes from 'routes';
+import { logOutUser } from 'actions/authActions';
+import { clearUsersCars } from 'actions/offerActions';
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -27,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Navbar({ loggedUserd }) {
+function Navbar({ loggedUserEmail, logOutFn }) {
   const classes = useStyles()
   return (
     <ul className={classes.menuList}>
@@ -55,6 +57,12 @@ function Navbar({ loggedUserd }) {
         to={routes.login}>
         Log in
         </NavLink></li>
+      <li><Link
+        className={classes.link}
+        to={routes.home}
+        onClick={logOutFn}>
+        Log out
+        </Link></li>
     </ul>
   )
 }
@@ -64,8 +72,15 @@ Navbar.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  loggedUserd: state.auth.userId,
+  loggedUserEmail: state.auth.userEmail,
 })
 
-export default connect(mapStateToProps)(Navbar)
+const mapDispatchToProps = (dispatch) => ({
+  logOutFn: () => {
+    dispatch(logOutUser());
+    dispatch(clearUsersCars());
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)
 

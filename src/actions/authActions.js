@@ -1,10 +1,12 @@
 import axios from 'axios';
+import { get } from 'lodash';
 export const SIGNUP_REQUESTED = 'SIGNUP_REQUESTED';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_ERROR = 'SIGNUP_ERROR';
 export const LOGIN_REQUESTED = 'LOGIN_REQUESTED';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
+export const LOGOUT = 'LOGOUT';
 
 export const signUpUser = (values) => (async (dispatch) => {
   try {
@@ -19,7 +21,7 @@ export const signUpUser = (values) => (async (dispatch) => {
     });
     dispatch({
       type: SIGNUP_SUCCESS,
-      payload: fetchData.data.userId
+      payload: fetchData.data.userEmail
     })
     return fetchData
   } catch (err) {
@@ -64,4 +66,10 @@ export const logInUser = (values) => (async (dispatch) => {
     })
     return err
   }
+})
+
+export const logOutUser = () => ((dispatch) => {
+  dispatch({
+    type: LOGOUT,
+  })
 })
