@@ -68,7 +68,8 @@ const offerReducer = (state = initialState, { type, payload }) => {
       toast.success('Car data fetched from db')
       return {
         ...state,
-        cars: [...state.cars, payload]
+        cars: [...state.cars, payload],
+        redirect: null
       }
     case FETCH_CARBYID_ERROR:
       toast.error(payload)

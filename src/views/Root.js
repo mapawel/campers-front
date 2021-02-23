@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import AppContext from 'context';
 import RootTemplate from 'templates/RootTemplate';
 import Home from 'views/Home';
@@ -13,7 +15,7 @@ import {
 import routes from 'routes';
 
 
-const Root = () => {
+const Root = ({ isUserLogged }) => {
   const [isAddingOpen, setAddingOpen] = useState(false)
   const [editedOfferValues, setEditedOfferValues] = useState(null)
 
@@ -30,6 +32,7 @@ const Root = () => {
         <Router>
           <Navbar />
           <Switch>
+
             <Route
               exact
               path={routes.home}
@@ -38,25 +41,47 @@ const Root = () => {
               )}
             >
             </Route>
+
             <Route
               path={routes.myoffers}
               children={({ match }) => (
-                < Home match={match} />
+                <>
+                  {isUserLogged ? (
+                    < Home match={match} />
+                  ) : (
+                      <Redirect to={routes.home} />
+                    )}
+                </>
               )}
             >
             </Route>
+
             <Route
               path={routes.signup}
               children={({ match, history }) => (
-                <SignInUp match={match} history={history} />
+                <>
+                  {!isUserLogged ? (
+                    <SignInUp match={match} history={history} />
+                  ) : (
+                      <Redirect to={routes.home} />
+                    )}
+
+                </>
               )}
             >
             </Route>
+
             <Route path={routes.login}
-              children={({ match, history }) => (
-                <SignInUp match={match} history={history} />
+              children={({ match, history }) => (<>
+                {!isUserLogged ? (
+                  <SignInUp match={match} history={history} />
+                ) : (
+                    <Redirect to={routes.home} />
+                  )}
+              </>
               )}>
             </Route>
+
             <Route
               path={routes.offer}
               children={({ match }) => (
@@ -64,6 +89,7 @@ const Root = () => {
               )}
             >
             </Route>
+
           </Switch>
         </Router>
       </RootTemplate>
@@ -71,5 +97,8 @@ const Root = () => {
   )
 }
 
+const mapStateToProps = state => ({
+  isUserLogged: state.auth.token
+})
 
-export default Root;
+export default connect(mapStateToProps)(Root);

@@ -39,18 +39,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Offer = ({ offer, FetchByIdFb }) => {
-  useEffect(() => {
-    if (!offer.length) FetchByIdFb()
-  }, [])
+const Offer = ({ offer, FetchByIdFb, match: { params: { offerId }} }) => {
 
+  useEffect(() => {
+    FetchByIdFb()
+  }, [offerId])
 
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <Section>
-      <div className={classes.galleryBox}>
+      <div className={classes.galleryBox} >
         <GridList cellHeight={360} className={classes.gridList} cols={3}>
           {offer.length && offer[0].imagesUrls.map((img, index) => (
             <GridListTile key={img} cols={1}>
@@ -58,10 +58,7 @@ const Offer = ({ offer, FetchByIdFb }) => {
             </GridListTile>
           ))}
         </GridList>
-      </div>
-
-
-
+      </div >
       <Card id={offer.length && offer[0]._id} className={classes.root} variant="outlined">
         <CardContent>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -84,7 +81,8 @@ const Offer = ({ offer, FetchByIdFb }) => {
           <Button size="small">details</Button>
         </CardActions>
       </Card>
-    </Section>
+    </Section >
+
   );
 };
 
@@ -96,7 +94,7 @@ Offer.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { match: { params: { offerId } } } = ownProps
   return ({
-    offer: state.offers.cars.filter(car => car._id === offerId)
+    offer: state.offers.cars.filter(car => car._id === offerId),
   })
 }
 
