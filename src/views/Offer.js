@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const Offer = ({ offer, FetchByIdFb, match: { params: { offerId }} }) => {
 
   useEffect(() => {
-    FetchByIdFb()
+    if(!offer.length) FetchByIdFb()
   }, [offerId])
 
   const classes = useStyles();

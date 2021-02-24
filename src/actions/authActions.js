@@ -55,7 +55,6 @@ export const logInUser = (values) => (async (dispatch) => {
     })
     return fetchData
   } catch (err) {
-    // console.log(err.toJSON())
     dispatch({
       type: LOGIN_ERROR,
       payload: {

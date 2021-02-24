@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
+import { Redirect } from 'react-router-dom';
 export const ADD_CAR_REQUESTED = 'ADD_CAR_REQUESTED';
 export const ADD_CAR_SUCCESS = 'ADD_CAR_SUCCESS';
 export const ADD_CAR_ERROR = 'ADD_CAR_ERROR';
@@ -46,7 +47,7 @@ export const startFetchCars = (elements = 10) => (async (dispatch, getState) => 
     console.log(err.response)
     dispatch({
       type: STARTFETCH_CAR_ERROR,
-      payload: `${err.message} - ${err.response.data.info}`
+      payload: `${err.message} - ${err.response?.data.info}`
     })
     return err
   }
@@ -69,14 +70,14 @@ export const fetchUsersCars = () => (async (dispatch, getState) => {
       type: FETCH_USERS_CAR_SUCCESS,
       payload: {
         usersCars: fetchData.data.carsRes.usersCars,
-      }
+      },
     })
     return fetchData
   } catch (err) {
-    console.log(err.response)
     dispatch({
       type: FETCH_USERS_CAR_ERROR,
-      payload: `${err.message} - ${err.response.data.info}`
+      payload: `${err.message} - ${err.response.data.info}`,
+      error: err.response
     })
     return err
   }
