@@ -1,6 +1,5 @@
 import axios from 'axios';
 import moment from 'moment';
-import { Redirect } from 'react-router-dom';
 export const ADD_CAR_REQUESTED = 'ADD_CAR_REQUESTED';
 export const ADD_CAR_SUCCESS = 'ADD_CAR_SUCCESS';
 export const ADD_CAR_ERROR = 'ADD_CAR_ERROR';
@@ -25,7 +24,7 @@ export const FETCH_CARBYID_SUCCESS = 'FETCH_CARBYID_SUCCESS';
 export const FETCH_CARBYID_ERROR = 'FETCH_CARBYID_ERROR';
 
 
-export const startFetchCars = (elements = 10) => (async (dispatch, getState) => {
+export const startFetchCars = (elements = 10) => (async (dispatch) => {
   try {
     dispatch({
       type: STARTFETCH_CAR_REQUESTED,
@@ -44,10 +43,10 @@ export const startFetchCars = (elements = 10) => (async (dispatch, getState) => 
     })
     return fetchData
   } catch (err) {
-    console.log(err.response)
     dispatch({
       type: STARTFETCH_CAR_ERROR,
-      payload: `${err.message} - ${err.response?.data.info}`
+      // payload: `${err.message} - ${err.response?.data.info}`,
+      error: err.response?.data,
     })
     return err
   }
@@ -76,8 +75,8 @@ export const fetchUsersCars = () => (async (dispatch, getState) => {
   } catch (err) {
     dispatch({
       type: FETCH_USERS_CAR_ERROR,
-      payload: `${err.message} - ${err.response.data.info}`,
-      error: err.response
+      // payload: `${err.message} - ${err.response.data.info}`,
+      error: err.response?.data,
     })
     return err
   }
@@ -112,7 +111,8 @@ export const restFetchCars = (elements = 5, onlyNew) => (async (dispatch, getSta
   } catch (err) {
     dispatch({
       type: RESTFETCH_CAR_ERROR,
-      payload: `${err.message} - ${err.response.data.info}`
+      // payload: `${err.message} - ${err.response.data.info}`
+      error: err.response?.data,
     })
     return err
   }
@@ -132,7 +132,8 @@ export const fetchCarById = (carId) => (async (dispatch) => {
   } catch (err) {
     dispatch({
       type: FETCH_CARBYID_ERROR,
-      payload: `${err.message} - ${err.response.data.info}`
+      // payload: `${err.message} - ${err.response.data.info}`
+      error: err.response?.data,
     })
   }
 })
@@ -157,7 +158,8 @@ export const DeleteCarById = (carId) => (async (dispatch, getState) => {
   } catch (err) {
     dispatch({
       type: DELETE_CAR_ERROR,
-      payload: `${err.message} - ${err.response.data.info}`
+      // payload: `${err.message} - ${err.response.data.info}`
+      error: err.response?.data,
     })
   }
 })
@@ -195,10 +197,11 @@ export const addOrUpdateCar = (car) => (async (dispatch, getState) => {
     } catch (err) {
       dispatch({
         type: UPDATE_CAR_ERROR,
-        payload: {
-          errorMessage: err.response.data.message,
-          errorValidationErrors: err.response.data.validationErrors
-        }
+        // payload: {
+        //   errorMessage: err.response.data.message,
+        //   errorValidationErrors: err.response.data.validationErrors
+        // }
+        error: err.response?.data,
       })
       return err
     }
@@ -224,10 +227,11 @@ export const addOrUpdateCar = (car) => (async (dispatch, getState) => {
     } catch (err) {
       dispatch({
         type: ADD_CAR_ERROR,
-        payload: {
-          errorMessage: err.response.data.message,
-          errorValidationErrors: err.response.data.validationErrors
-        }
+        // payload: {
+        //   errorMessage: err.response.data.message,
+        //   errorValidationErrors: err.response.data.validationErrors
+        // }
+        error: err.response?.data,
       })
       return err
     }

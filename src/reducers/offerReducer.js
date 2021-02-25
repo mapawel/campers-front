@@ -1,5 +1,4 @@
 import { toast } from 'react-toastify';
-import moment from 'moment';
 import { ADD_CAR_REQUESTED, ADD_CAR_SUCCESS, ADD_CAR_ERROR, STARTFETCH_CAR_REQUESTED, STARTFETCH_CAR_SUCCESS, STARTFETCH_CAR_ERROR, RESTFETCH_CAR_REQUESTED, RESTFETCH_CAR_SUCCESS, RESTFETCH_CAR_ERROR, FETCH_CARBYID_REQUESTED, FETCH_CARBYID_SUCCESS, FETCH_CARBYID_ERROR, UPDATE_CAR_REQUESTED, UPDATE_CAR_SUCCESS, UPDATE_CAR_ERROR, DELETE_CAR_REQUESTED, DELETE_CAR_SUCCES, DELETE_CAR_ERROR, FETCH_USERS_CAR_REQUESTED, FETCH_USERS_CAR_SUCCESS, FETCH_USERS_CAR_ERROR, CLEAR_USERS_CAR } from 'actions/offerActions'
 
 const initialState = {
@@ -21,7 +20,7 @@ const offerReducer = (state = initialState, { type, payload }) => {
         carsQty: payload.carsQty
       }
     case STARTFETCH_CAR_ERROR:
-      toast.error(payload)
+      toast.error('Error while fetching data!')
       return state
 
 
@@ -35,7 +34,7 @@ const offerReducer = (state = initialState, { type, payload }) => {
         usersCars: [...payload.usersCars],
       }
     case FETCH_USERS_CAR_ERROR:
-      toast.error(payload)
+      toast.error('Error while fetching user data!')
       return state
 
 
@@ -57,7 +56,7 @@ const offerReducer = (state = initialState, { type, payload }) => {
         carsQty: payload.carsQty
       }
     case RESTFETCH_CAR_ERROR:
-      toast.error(payload)
+      toast.error('Error while fetching rest data!')
       return state
 
 
@@ -72,7 +71,7 @@ const offerReducer = (state = initialState, { type, payload }) => {
         redirect: null
       }
     case FETCH_CARBYID_ERROR:
-      toast.error(payload)
+      toast.error('Error while fetching choosen data!')
       return state
 
 
@@ -86,9 +85,10 @@ const offerReducer = (state = initialState, { type, payload }) => {
         cars: [...payload, ...state.cars]
       }
     case ADD_CAR_ERROR:
-      toast.error(
-        `${payload.errorMessage}: ${payload.errorValidationErrors ? payload.errorValidationErrors?.map(err => ` ${err.msg}`) : '...'}`
-        , { autoClose: 15000 })
+      // toast.error(
+      //   `${payload.errorMessage}: ${payload.errorValidationErrors ? payload.errorValidationErrors?.map(err => ` ${err.msg}`) : '...'}`
+      //   , { autoClose: 15000 })
+      toast.error('Error while adding new data!')
       return state
 
 
@@ -105,9 +105,10 @@ const offerReducer = (state = initialState, { type, payload }) => {
         })],
       }
     case UPDATE_CAR_ERROR:
-      toast.error(
-        `${payload.errorMessage}: ${payload.errorValidationErrors ? payload.errorValidationErrors?.map(err => ` ${err.msg}`) : '...'}`
-        , { autoClose: 15000 })
+      // toast.error(
+      //   `${payload.errorMessage}: ${payload.errorValidationErrors ? payload.errorValidationErrors?.map(err => ` ${err.msg}`) : '...'}`
+      //   , { autoClose: 15000 })
+      toast.error('Error while updating data!')
       return state
 
 
@@ -121,9 +122,8 @@ const offerReducer = (state = initialState, { type, payload }) => {
         cars: [...state.cars.filter(car => car._id !== payload._id)],
       }
     case DELETE_CAR_ERROR:
-      toast.error(payload)
+      toast.error('Error while deleting data!')
       return state
-
 
     default:
       return state

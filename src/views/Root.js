@@ -13,9 +13,10 @@ import {
   Route,
 } from "react-router-dom";
 import routes from 'routes';
+import { resetError } from 'actions/errorActions';
 
 
-const Root = ({ isUserLogged }) => {
+const Root = ({ isUserLogged, appError, resetErrorFn }) => {
   const [isAddingOpen, setAddingOpen] = useState(false)
   const [editedOfferValues, setEditedOfferValues] = useState(null)
 
@@ -28,7 +29,7 @@ const Root = ({ isUserLogged }) => {
 
   return (
     <AppContext.Provider value={context}>
-      <RootTemplate>
+      <RootTemplate appError={appError} resetErrorFn={resetErrorFn} >
         <Router>
           <Navbar />
           <Switch>
@@ -98,7 +99,12 @@ const Root = ({ isUserLogged }) => {
 }
 
 const mapStateToProps = state => ({
-  isUserLogged: state.auth.token
+  isUserLogged: state.auth.token,
+  appError: state.error.error,
 })
 
-export default connect(mapStateToProps)(Root);
+const mapDispatchToProps = dispatch => ({
+  resetErrorFn: () => dispatch(resetError())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Root);
