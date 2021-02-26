@@ -15,9 +15,7 @@ const authReducer = (state = initialState, { type, payload }) => {
       toast.success(`Signed up user: ${payload}`)
       return state
     case SIGNUP_ERROR:
-      toast.error(
-        `${payload.errorMessage}: ${payload.errorValidationErrors && payload.errorValidationErrors.map(err => ` ${err.msg}`)} ${payload.errorInfo && payload.errorInfo}`
-        , { autoClose: 15000 })
+      toast.error('Error while signing up')
       return state
 
 
@@ -26,16 +24,13 @@ const authReducer = (state = initialState, { type, payload }) => {
       return state
     case LOGIN_SUCCESS:
       toast.success('Logged in!')
-      console.log('reducer payload login: ', payload)
       return {
         ...state,
         userEmail: payload.userEmail,
         token: payload.token,
       }
     case LOGIN_ERROR:
-      toast.error(
-        `${payload.errorMessage} ${payload.errorValidationErrors ? payload.errorValidationErrors.map(err => ` ${err.msg}`) : ''} ${payload.errorInfo ? payload.errorInfo : ''}`
-        , { autoClose: 15000 })
+      toast.error('Error while logging in')
       return state
 
 

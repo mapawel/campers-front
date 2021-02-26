@@ -7,9 +7,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'templates/toastify.css';
 import Modal from '@material-ui/core/Modal';
+import AlertWindow from 'components/molecules/AlertWindow';
 
 const RootTemplate = ({ children, appError, resetErrorFn }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const ref = React.createRef();
 
   useEffect(() => {
     if (appError) {
@@ -31,7 +33,10 @@ const RootTemplate = ({ children, appError, resetErrorFn }) => {
         onClose={handleModalClose}
         aria-labelledby="error-modal"
       >
-        <></>
+        <AlertWindow
+        ref={ref}
+        appError={appError}
+        handleModalClose={handleModalClose} />
       </Modal>
       {children}
       <ToastContainer

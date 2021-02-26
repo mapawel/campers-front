@@ -45,7 +45,6 @@ export const startFetchCars = (elements = 10) => (async (dispatch) => {
   } catch (err) {
     dispatch({
       type: STARTFETCH_CAR_ERROR,
-      // payload: `${err.message} - ${err.response?.data.info}`,
       error: err.response?.data,
     })
     return err
@@ -75,7 +74,6 @@ export const fetchUsersCars = () => (async (dispatch, getState) => {
   } catch (err) {
     dispatch({
       type: FETCH_USERS_CAR_ERROR,
-      // payload: `${err.message} - ${err.response.data.info}`,
       error: err.response?.data,
     })
     return err
@@ -111,7 +109,6 @@ export const restFetchCars = (elements = 5, onlyNew) => (async (dispatch, getSta
   } catch (err) {
     dispatch({
       type: RESTFETCH_CAR_ERROR,
-      // payload: `${err.message} - ${err.response.data.info}`
       error: err.response?.data,
     })
     return err
@@ -132,7 +129,6 @@ export const fetchCarById = (carId) => (async (dispatch) => {
   } catch (err) {
     dispatch({
       type: FETCH_CARBYID_ERROR,
-      // payload: `${err.message} - ${err.response.data.info}`
       error: err.response?.data,
     })
   }
@@ -153,12 +149,11 @@ export const DeleteCarById = (carId) => (async (dispatch, getState) => {
     })
     dispatch({
       type: DELETE_CAR_SUCCES,
-      payload: response.data.deletedCar
+      payload: response.data.toDelete
     })
   } catch (err) {
     dispatch({
       type: DELETE_CAR_ERROR,
-      // payload: `${err.message} - ${err.response.data.info}`
       error: err.response?.data,
     })
   }
@@ -197,10 +192,6 @@ export const addOrUpdateCar = (car) => (async (dispatch, getState) => {
     } catch (err) {
       dispatch({
         type: UPDATE_CAR_ERROR,
-        // payload: {
-        //   errorMessage: err.response.data.message,
-        //   errorValidationErrors: err.response.data.validationErrors
-        // }
         error: err.response?.data,
       })
       return err
@@ -227,10 +218,6 @@ export const addOrUpdateCar = (car) => (async (dispatch, getState) => {
     } catch (err) {
       dispatch({
         type: ADD_CAR_ERROR,
-        // payload: {
-        //   errorMessage: err.response.data.message,
-        //   errorValidationErrors: err.response.data.validationErrors
-        // }
         error: err.response?.data,
       })
       return err

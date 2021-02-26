@@ -116,7 +116,9 @@ const AddModalBody = React.forwardRef(({ context, addFn }, ref) => {
         updating: editedOfferValues ? true : false,
         id: editedOfferValues?.id,
       });
-      setAddingOpen(false)
+      if (response.status === 201) {
+        setAddingOpen(false)
+      }
     },
   });
 

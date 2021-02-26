@@ -25,14 +25,9 @@ export const signUpUser = (values) => (async (dispatch) => {
     })
     return fetchData
   } catch (err) {
-    // console.log(err.toJSON())
     dispatch({
       type: SIGNUP_ERROR,
-      payload: {
-        errorMessage: err.response.data.message,
-        errorValidationErrors: err.response.data.validationErrors,
-        errorInfo: err.response.data.info
-      }
+      error: err.response?.data,
     })
     return err
   }
@@ -57,11 +52,7 @@ export const logInUser = (values) => (async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOGIN_ERROR,
-      payload: {
-        errorMessage: err.response.data.message,
-        errorValidationErrors: err.response.data.validationErrors,
-        errorInfo: err.response.data.info
-      }
+      error: err.response?.data,
     })
     return err
   }
